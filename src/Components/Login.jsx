@@ -1,9 +1,12 @@
 import React, { useRef, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { addUser } from "../Redux/userSlice";
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      token
       user {
         id
         userName
@@ -14,23 +17,26 @@ const LOGIN = gql`
 `;
 
 const Login = () => {
-  const [user,setUser]=useState()
   const emailRef = useRef();
   const passwordRef = useRef();
-  const [login, { loading, error ,data }] = useMutation(LOGIN);
+  const navigate = useNavigate()
+  const dispatch=useDispatch()
+  const user = useSelector((state) => state.user); 
+  const [login, { loading, error, data }] = useMutation(LOGIN);
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = async (e) => {
+    e.preventDefault()
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
     if (!email) {
-      console.log("Please enter the email!");
+      alert("Please enter the email!");
       emailRef.current.focus();
       return;
     }
 
     if (!password) {
-      console.log("Please enter the password!");
+      alert("Please enter password")
       passwordRef.current.focus();
       return;
     }
@@ -40,13 +46,19 @@ const Login = () => {
         variables: { email, password },
       });
 
-      setUser(response.data.login.user)
+      const token= response?.data?.login?.token
+      const userData=response?.data?.login?.user
+      dispatch(addUser(userData))
+      
+      if (token && userData) {
+        dispatch(addUser(userData)); // Save user in Redux
+        navigate('/feed'); // Navigate to feed after successful login
+      } else {
+        alert("Invalid login, please try again.");
+      }
 
-      console.log("Login Successful!", response.data);
+      console.log("Login Successful!", response);
       console.log("User:", response.data.login.user);
-
-      // Optionally, you can redirect the user to a protected route after login
-      // window.location.href = "/dashboard"; // Example: Redirect to a dashboard after login
 
     } catch (err) {
       console.error("Error during login:", err.message);
@@ -54,26 +66,41 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <input
-        ref={emailRef}
-        type="email"
-        placeholder="Please enter your email!"
-      />
-      <input
-        ref={passwordRef}
-        type="password"
-        placeholder="Please enter your password"
-      />
-      <button onClick={handleButtonClick} disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
-      </button>
-      {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
-      {data && (
-        <p style={{ color: "green" }}>
-          Welcome, {user.userName}! You are logged in.
-        </p>
-      )}
+    <div className="flex flex-col justify-center items-center h-screen gap-5"
+      style={{
+           backgroundImage: 'url("https://cdn.dribbble.com/users/1556898/screenshots/4390765/media/bd2606e02021ec45f6577959e13bb01c.gif")',
+           backgroundSize: 'cover',
+           backgroundPosition: 'center',
+           backgroundRepeat: 'no-repeat'
+         }}
+    >
+      <form onSubmit={handleButtonClick} className="flex flex-col w-full max-w-sm border border-gray-300 rounded-2xl gap-6 p-6 shadow-lg bg-white">
+        <h1 className="text-5xl p-4 text-center">𝒮𝓉𝒶𝓎𝐼𝓉</h1>
+        <input
+          className="border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-1 focus:ring-green-200"
+          ref={emailRef}
+          type="email"
+          placeholder="Email or Username"
+        />
+        <input
+          className="border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-1 focus:ring-green-200"
+          ref={passwordRef}
+          type="password"
+          placeholder="Password"
+        />
+        <button disabled={loading} className="bg-red-400 text-white py-2 rounded-md hover:bg-red-400 disabled:bg-gray-400 cursor-pointer">
+          {loading ? "Logging in..." : "Login"}
+        </button>
+        {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+        {data && (
+          <p style={{ color: "green" }}>
+            Welcome, {user.userName}! You are logged in.
+          </p>
+        )}
+      </form>
+      <div className="border-1 w-[380px] flex items-center justify-center border-gray-300 shadow-lg rounded-xl bg-white">
+        <p className="p-4">New to StayIt? <Link className="text-blue-400" to={'/register'}>Create account</Link> </p>
+      </div>
     </div>
   );
 };

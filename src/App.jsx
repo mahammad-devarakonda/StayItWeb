@@ -7,6 +7,11 @@ import {
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './Components/Login';
 import Register from './Components/Register';
+import Feed from './Components/Feed';
+import appStore from './Redux/Store';
+import { Provider } from "react-redux";
+import ProtectedRoute from './Components/ProtectedRoute';
+
 
 const client = new ApolloClient({
   uri: "http://localhost:3000/graphql", // Replace with your GraphQL endpoint
@@ -21,6 +26,15 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />
+  },
+  {
+    element: <ProtectedRoute />, // ProtectedRoute wrapper
+    children: [
+      {
+        path: '/feed',
+        element: <Feed />
+      },
+    ],
   }
 ])
 
@@ -33,9 +47,11 @@ const Layout = () => {
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <div>
-        <Layout />
-      </div>
+      <Provider store={appStore}>
+        <div>
+          <Layout />
+        </div>
+      </Provider>
     </ApolloProvider>
   )
 }
