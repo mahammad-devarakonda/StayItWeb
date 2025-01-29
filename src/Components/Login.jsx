@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -48,7 +48,8 @@ const Login = () => {
 
       const token= response?.data?.login?.token
       const userData=response?.data?.login?.user
-      dispatch(addUser(userData))
+     
+      localStorage.setItem("token", token);
       
       if (token && userData) {
         dispatch(addUser(userData)); // Save user in Redux

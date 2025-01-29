@@ -3,10 +3,10 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
-  const user = useSelector((state) => state.user);
+  
+  const token = localStorage.getItem("token");
 
-  // Check if the user is authenticated (you can modify this based on your logic)
-  const isAuthenticated = !!user?.id;
+  const isAuthenticated = !!token
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };

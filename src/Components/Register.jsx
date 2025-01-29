@@ -1,7 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { addUser } from "../Redux/userSlice";
 
 const REGISTER = gql`
   mutation REGISTER($email:String!,$password:String!,$userName:String!){
@@ -21,9 +23,11 @@ const Register = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const usernameRef = useRef()
-  const [user, setUser] = useState()
   const navigate = useNavigate()
   const [register, { loading, data, error }] = useMutation(REGISTER);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -56,11 +60,15 @@ const Register = () => {
         variables: { userName, email, password },
       })
 
-      console.log(response);
+      const token = response?.data?.register?.token
+      const userData = response?.data?.register?.user
       
-
-      setUser(response?.data?.register?.user)
-      navigate('/feed')
+      if (token && userData) {
+        dispatch(addUser(userData)); // Save user in Redux
+        navigate('/feed'); // Navigate to feed after successful login
+      } else {
+        alert("Please try again.");
+      }
       console.log("Signup Successful!", response.data);
 
     } catch (error) {
@@ -99,7 +107,7 @@ const Register = () => {
           placeholder="Password"
         />
         <button disabled={loading} className="bg-red-400 text-white py-2 rounded-md hover:bg-red-400 disabled:bg-gray-400 cursor-pointer">
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Registering..." : "Sign Up"}
         </button>
         {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
         {data && (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Search, Compass, Film, MessageCircle, Heart, PlusCircle} from "lucide-react";
+import { Home, Search, Compass, MessageCircle, Heart, PlusCircle} from "lucide-react";
 
 const Navbar = () => {
     return (
