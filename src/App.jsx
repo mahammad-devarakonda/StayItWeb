@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './Components/Login';
 import Register from './Components/Register';
 import Feed from './Components/Feed';
+import UserProfile from './Components/UserProfile';
 import appStore from './Redux/Store';
 import { Provider } from "react-redux";
 import ProtectedRoute from './Components/ProtectedRoute';
@@ -17,16 +18,19 @@ import {setContext} from "@apollo/client/link/context"
 
 
 const httpLink=createHttpLink({
-  uri:"http://localhost:3000/graphql"
+  uri:"http://localhost:3001/graphql"
 })
 
 
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token"); // Replace with your token logic
+const authLink = setContext((_, { headers}) => {
+
+  const token = sessionStorage.getItem("token"); 
+  const authorization = token ? `Bearer ${token}` : '';
   return {
     headers: {
       ...headers,
-      Authorization: token ? `Bearer ${token}` : "",
+      Authorization:authorization,
+      'custom-header': 'custom-value',
     },
   };
 });
@@ -35,7 +39,7 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   link:authLink.concat(httpLink),
   cache: new InMemoryCache(),
-});
+})
 
 const router = createBrowserRouter([
   {
@@ -53,6 +57,10 @@ const router = createBrowserRouter([
         path: '/feed',
         element: <Feed />
       },
+      {
+        path:'/userprofile',
+        element:<UserProfile/>
+      }
     ],
   }
 ])

@@ -14,7 +14,7 @@ const Navbar = () => {
                 <ul className="space-y-6 px-6 text-lg">
                     <li className="flex items-center space-x-4">
                         <Home className="w-6 h-6" />
-                        <Link to="/" className="font-semibold">Home</Link>
+                        <Link to="/feed" className="font-semibold">Home</Link>
                     </li>
                     <li className="flex items-center space-x-4">
                         <Search className="w-6 h-6" />

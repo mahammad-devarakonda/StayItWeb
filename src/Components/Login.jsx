@@ -49,7 +49,7 @@ const Login = () => {
       const token= response?.data?.login?.token
       const userData=response?.data?.login?.user
      
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
       
       if (token && userData) {
         dispatch(addUser(userData)); // Save user in Redux
@@ -57,9 +57,6 @@ const Login = () => {
       } else {
         alert("Invalid login, please try again.");
       }
-
-      console.log("Login Successful!", response);
-      console.log("User:", response.data.login.user);
 
     } catch (err) {
       console.error("Error during login:", err.message);
