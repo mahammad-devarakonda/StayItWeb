@@ -21,7 +21,6 @@ const USER_PROFILE_POSTS = gql`
 
 
 const useUserPosts = () => {
-
     const { data, loading, error } = useQuery(USER_PROFILE_POSTS);
 
     return {loading,error,data};

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Search, Compass, MessageCircle, Heart, PlusCircle } from "lucide-react";
+import { Home, Compass, MessageCircle, Heart, PlusCircle } from "lucide-react";
 
 const Navbar = () => {
     return (
@@ -44,12 +44,14 @@ const Navbar = () => {
 
                 <div className="p-6">
                     <li className="flex items-center space-x-4">
-                        <img
-                            src="https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png"
-                            alt="Profile"
-                            className="w-8 h-8 rounded-full"
-                        />
-                        <Link to="/userprofile">Profile</Link>
+                        <Link to="/userprofile/:id" className="flex flex-row gap-4 items-center">
+                            <img
+                                src="https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png"
+                                alt="Profile"
+                                className="w-8 h-8 rounded-full"
+                            />
+                            <p className="text-lg">Profile</p>
+                        </Link>
                     </li>
                 </div>
             </nav>
