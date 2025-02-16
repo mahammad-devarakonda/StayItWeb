@@ -16,16 +16,15 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import {setContext} from "@apollo/client/link/context"
 
 
-
 const httpLink=createHttpLink({
   uri:"http://localhost:3001/graphql"
 })
-
 
 const authLink = setContext((_, { headers}) => {
 
   const token = sessionStorage.getItem("token"); 
   const authorization = token ? `Bearer ${token}` : '';
+  
   return {
     headers: {
       ...headers,
@@ -51,14 +50,14 @@ const router = createBrowserRouter([
     element: <Register />
   },
   {
-    element: <ProtectedRoute />, // ProtectedRoute wrapper
+    element: <ProtectedRoute />,
     children: [
       {
         path: '/feed',
         element: <Feed />
       },
       {
-        path:'/userprofile',
+        path:'/userprofile/:id',
         element:<UserProfile/>
       }
     ],
