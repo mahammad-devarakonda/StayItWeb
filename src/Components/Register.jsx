@@ -54,7 +54,6 @@ const Register = () => {
       return;
     }
 
-
     try {
       const response = await register({
         variables: { userName, email, password },
@@ -62,7 +61,9 @@ const Register = () => {
 
       const token = response?.data?.register?.token
       const userData = response?.data?.register?.user
-      
+
+      sessionStorage.setItem("token", token)
+
       if (token && userData) {
         dispatch(addUser(userData)); // Save user in Redux
         navigate('/feed'); // Navigate to feed after successful login
@@ -87,7 +88,9 @@ const Register = () => {
       }}
     >
       <form onSubmit={handleRegister} className="flex flex-col w-full max-w-sm border border-gray-300 rounded-2xl gap-6 p-6 shadow-lg bg-white">
-        <h1 className="text-5xl p-4 text-center">𝒮𝓉𝒶𝓎𝐼𝓉</h1>
+        <h1 className="text-2xl font-medium font-serif text-left tracking-widest">
+          StayIt
+        </h1>
         <input
           className="border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-1 focus:ring-green-200"
           ref={usernameRef}

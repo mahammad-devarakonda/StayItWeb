@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useFeed from "../Hooks/useFeed";
 import useFollowRequest from "../Hooks/useFollowRequest";
+import { Compass, MessageCircle, Heart, } from "lucide-react";
 
 const UserFeed = () => {
   const { loading, error, feed } = useFeed();
@@ -12,7 +13,7 @@ const UserFeed = () => {
 
 
   return (
-    <div className="flex flex-col items-center space-y-6 p-6 min-h-screen">
+    <div className="flex flex-col items-center p-4 min-h-screen">
       {feed.map((user) => (
         <div key={user.id} className="w-[600px] bg-white rounded-lg overflow-hidden">
           <div>
@@ -20,15 +21,14 @@ const UserFeed = () => {
               <div className="flex items-center gap-4">
                 <Link to={`/userprofile/${user.id}`}>
                   <img
-                    className="rounded-full w-12 h-12 object-cover"
+                    className="rounded-full w-10 h-10 object-cover"
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                     alt="Avatar"
                   />
                 </Link>
-                <p className="text-lg font-semibold">
+                <p className="text-base font-semibold">
                   <Link to={`/userprofile/${user.id}`}>{user.userName}</Link>
                 </p>
-
               </div>
               <button
                 className="text-blue-500 font-medium"
@@ -44,9 +44,13 @@ const UserFeed = () => {
                 alt="User Post"
                 className="w-full h-[400px] object-contain"
               />
-              <div className="flex flex-row items-start gap-1 py-10 text-left">
-                <span className="font-medium">{user.userName}</span><p className="text-gray-700">{user?.posts[0]?.content}</p>
-                
+              <div className="flex flex-col items-start gap-1 py-5 text-left text-sm">
+{/*                 <div className="flex gap-3">
+                  <Heart className="cursor-pointer"/>
+                  <MessageCircle className="cursor-pointer"/>
+                </div>
+                 */}
+                <p className="text-gray-700"><span className="font-semibold text-black">{user?.userName}</span> {user?.posts?.[0]?.content}</p>
               </div>
             </div>
             <hr className="border-t-1 border-gray-300 my-2 w-full" />

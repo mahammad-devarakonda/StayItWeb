@@ -3,6 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addUser } from "../Redux/userSlice";
+
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -20,8 +21,8 @@ const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate()
-  const dispatch=useDispatch()
-  const user = useSelector((state) => state.user); 
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user);
   const [login, { loading, error, data }] = useMutation(LOGIN);
 
   const handleButtonClick = async (e) => {
@@ -46,14 +47,14 @@ const Login = () => {
         variables: { email, password },
       });
 
-      const token= response?.data?.login?.token
-      const userData=response?.data?.login?.user
-     
+      const token = response?.data?.login?.token
+      const userData = response?.data?.login?.user
+
       sessionStorage.setItem("token", token);
-      
+
       if (token && userData) {
-        dispatch(addUser(userData)); // Save user in Redux
-        navigate('/feed'); // Navigate to feed after successful login
+        dispatch(addUser(userData));
+        navigate('/feed');
       } else {
         alert("Invalid login, please try again.");
       }
@@ -66,14 +67,16 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-5"
       style={{
-           backgroundImage: 'url("https://cdn.dribbble.com/users/1556898/screenshots/4390765/media/bd2606e02021ec45f6577959e13bb01c.gif")',
-           backgroundSize: 'cover',
-           backgroundPosition: 'center',
-           backgroundRepeat: 'no-repeat'
-         }}
+        backgroundImage: 'url("https://cdn.dribbble.com/users/1556898/screenshots/4390765/media/bd2606e02021ec45f6577959e13bb01c.gif")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
       <form onSubmit={handleButtonClick} className="flex flex-col w-full max-w-sm border border-gray-300 rounded-2xl gap-6 p-6 shadow-lg bg-white">
-        <h1 className="text-5xl p-4 text-center">𝒮𝓉𝒶𝓎𝐼𝓉</h1>
+        <h1 className="text-2xl font-medium font-serif text-left tracking-widest">
+          StayIt
+        </h1>
         <input
           className="border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-1 focus:ring-green-200"
           ref={emailRef}

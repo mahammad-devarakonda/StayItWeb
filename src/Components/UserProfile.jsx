@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import useUserProfile from "../Hooks/useUserProfile";
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 
 
 const UserProfile = () => {
@@ -12,6 +12,8 @@ const UserProfile = () => {
 
   const user=userProfile?.user
   const posts=userProfile?.posts
+  console.log(posts);
+  
 
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">Error: {error.message}</p>;
@@ -32,14 +34,15 @@ const UserProfile = () => {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <h1 className="text-black text-2xl font-semibold">
                 {user?.userName}
               </h1>
+              <Link className="text-base border border-indigo-300 bg-indigo-300 p-1 rounded-xl" to={`/inbox/${userID}`} state={{ user }} >Message</Link>
             </div>
 
             <div className="flex space-x-5 text-gray-700 text-lg">
-              <p><span className="font-semibold">288</span> posts</p>
+              <p><span className="font-semibold">{posts.length} </span>Posts</p>
               <p><span className="font-semibold">4</span> Connections</p>
             </div>
           </div>

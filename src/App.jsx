@@ -14,7 +14,7 @@ import appStore from './Redux/Store';
 import { Provider } from "react-redux";
 import ProtectedRoute from './Components/ProtectedRoute';
 import {setContext} from "@apollo/client/link/context"
-
+import Chatting from './Components/Chatting';
 
 const httpLink=createHttpLink({
   uri:"http://localhost:3001/graphql"
@@ -59,7 +59,11 @@ const router = createBrowserRouter([
       {
         path:'/userprofile/:id',
         element:<UserProfile/>
-      }
+      },
+      {
+        path:'inbox/:id',
+        element:<Chatting/>
+      },
     ],
   }
 ])
