@@ -17,7 +17,7 @@ import {setContext} from "@apollo/client/link/context"
 import Chatting from './Components/Chatting';
 
 const httpLink=createHttpLink({
-  uri:"/api"
+  uri:"/api/graphql"
 })
 
 const authLink = setContext((_, { headers}) => {
