@@ -18,7 +18,7 @@ import Chatting from './Components/Chatting';
 import MyRequestList from './Components/MyRequestList';
 
 const httpLink=createHttpLink({
-  uri:"http://localhost:3001/graphql"
+  uri:"api/graphql"
 })
 
 const authLink = setContext((_, { headers}) => {
