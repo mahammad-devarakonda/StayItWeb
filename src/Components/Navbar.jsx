@@ -4,12 +4,14 @@ import { Home, Compass, MessageCircle, Heart, PlusCircle } from "lucide-react";
 import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import useUploadImage from "../Hooks/useUploadImage";
+import MyRequestList from "./MyRequestList";
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const [isModalOpen, setModalOpen] = useState(false);
   const { content, setContent, imageURL, setImageURL, handleChange, loading } = useUploadImage();
 
-
+  const [isRequestListOpen,setRequestListOpen]=useState(false)
+  
   return (
     <>
       <aside className="w-64 h-screen bg-white border-r border-gray-200 fixed flex flex-col justify-between">
@@ -21,7 +23,7 @@ const Navbar = () => {
 
         <nav className="flex flex-col justify-between h-full">
           <div>
-            <ul className="space-y-6 px-6 text-lg">
+            <ul className="space-y-6 px-6 text-base">
               <li className="flex items-center space-x-4">
                 <Home className="w-6 h-6" />
                 <Link to="/feed" className="font-semibold">Home</Link>
@@ -41,9 +43,9 @@ const Navbar = () => {
                 <Link to="/inbox">Messages</Link>
               </li>
 
-              <li className="flex items-center space-x-4">
+              <li className="flex items-center space-x-4 cursor-pointer">
                 <Heart className="w-6 h-6" />
-                <Link to="/notifications">Notifications</Link>
+                <button className="cursor-pointer" onClick={() => setRequestListOpen(true)}>Requests</button>
               </li>
 
               <li className="flex items-center space-x-4 cursor-pointer">
@@ -70,11 +72,15 @@ const Navbar = () => {
         </nav>
       </aside>
 
+      <Modal isOpen={isRequestListOpen} onClose={() => setRequestListOpen(false)} title="Friend Requests">
+        <MyRequestList/>
+      </Modal>
+
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title="Create Post">
-        <div className="border border-black p-4 rounded-lg flex flex-col items-center gap-3 w-72 mx-auto mt-10">
+        <div className="border border-dashed border-black p-4 rounded-lg flex flex-col items-center gap-3 w-72 mx-auto mt-10">
           <form onChange={handleChange} className="flex flex-col gap-2">
-            <input onChange={(e) => setImageURL(e.target.value)} type="url" className="border p-1 w-full rounded-md" placeholder="Please provide Image URL" />
-            <input onChange={(e) => setContent(e.target.value)} type="text" className="border p-1 w-full rounded-md" placeholder="Provide your caption" />
+            <input onChange={(e) => setImageURL(e.target.value)} type="url" className="border w-full rounded-md text-xs py-2 px-4" placeholder="Please provide Image URL" />
+            <input onChange={(e) => setContent(e.target.value)} type="text" className="border w-full rounded-md text-xs py-2 px-4" placeholder="Provide your caption" />
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition cursor-pointer"
