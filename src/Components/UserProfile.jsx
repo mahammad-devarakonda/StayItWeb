@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import useUserProfile from "../Hooks/useUserProfile";
 import { useParams, Link } from "react-router-dom";
+import Modal from "./Modal";
 
 
 const UserProfile = () => {
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const parms = useParams();
   const userID = parms?.id
@@ -13,12 +17,27 @@ const UserProfile = () => {
   const user = userProfile?.user
   const posts = userProfile?.posts
 
+  const loggedInUserID = sessionStorage.getItem("user");
+  const parsedUser = JSON.parse(loggedInUserID)
+
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
 
+  const handleOpenImage = (imageURL, content) => {
+    setSelectedImage({imageURL, content})
+    setModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedImage(null)
+    setModalOpen(false)
+  }
+
+  console.log(selectedImage);
+  
+
   return (
     <div className="flex flex-col md:flex-row w-full h-screen">
-      {/* Navbar: Sidebar on Large Screens, Footer on Small Screens */}
       <aside className="hidden md:block md:w-1/5 md:h-full bg-white shadow-md border-r">
         <Navbar />
       </aside>
@@ -39,13 +58,15 @@ const UserProfile = () => {
               <h1 className="text-black text-xl md:text-2xl font-semibold">
                 {user?.userName}
               </h1>
-              <Link
-                to={`/inbox/${userID}`}
-                state={{ user }}
-                className="border border-gray-400 px-3 py-1 rounded-md font-semibold text-sm md:text-base"
-              >
-                Message
-              </Link>
+              {parsedUser.id !== userID && (
+                <Link
+                  to={`/inbox/${userID}`}
+                  state={{ user }}
+                  className="border border-gray-400 px-3 py-1 rounded-md font-semibold text-sm md:text-base"
+                >
+                  Message
+                </Link>
+              )}
             </div>
 
             <div className="flex justify-center md:justify-start space-x-5 text-gray-700 text-sm md:text-lg">
@@ -74,7 +95,8 @@ const UserProfile = () => {
                 key={post?.id}
                 src={post?.imageURL}
                 alt="User Post"
-                className="w-40 h-40 sm:w-56 sm:h-56 object-cover shadow-md"
+                className="sm:w-56 sm:h-56 object-cover shadow-md cursor-pointer"
+                onClick={() => handleOpenImage(post?.imageURL, post?.content)}
               />
             ))
           ) : (
@@ -83,6 +105,18 @@ const UserProfile = () => {
             </p>
           )}
         </div>
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalClassName="w-[600px] h-auto rounded-lg p-6">
+          {selectedImage && (
+            <div className="flex flex-col p-2">
+            <img
+              src={selectedImage.imageURL}
+              alt="Selected Post"
+              className="w-full h-auto"
+            />
+            <p className="text-gray-800  mt-2 ">{selectedImage.content}</p>
+          </div>
+          )}
+        </Modal>
       </main>
     </div>
 
