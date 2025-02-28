@@ -12,11 +12,9 @@ const UserProfile = () => {
 
   const user = userProfile?.user
   const posts = userProfile?.posts
-  console.log(posts);
-
 
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
-  if (error) return <p className="text-center text-lg text-red-500">Error: {error.message}</p>;
+  if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
 
   return (
     <div className="flex flex-col md:flex-row w-full h-screen">
@@ -51,7 +49,7 @@ const UserProfile = () => {
             </div>
 
             <div className="flex justify-center md:justify-start space-x-5 text-gray-700 text-sm md:text-lg">
-              <p><span className="font-semibold">{posts.length}</span> Posts</p>
+              <p><span className="font-semibold">{posts?.length}</span> Posts</p>
               <p><span className="font-semibold">4</span> Connections</p>
             </div>
           </div>
@@ -73,8 +71,8 @@ const UserProfile = () => {
           {posts?.length ? (
             posts.map((post) => (
               <img
-                key={post.id}
-                src={post.imageURL}
+                key={post?.id}
+                src={post?.imageURL}
                 alt="User Post"
                 className="w-40 h-40 sm:w-56 sm:h-56 object-cover shadow-md"
               />

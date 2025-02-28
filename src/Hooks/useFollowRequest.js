@@ -27,7 +27,7 @@ const useFollowRequest = () => {
           status: "interested",
         },
       });
-      console.log("Follow request sent:", data);
+      
       alert(`Follow request sent to ${id}`);
     } catch (err) {
       console.error("Error sending request:", err);

@@ -8,10 +8,9 @@ import MyRequestList from "./MyRequestList";
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const [isModalOpen, setModalOpen] = useState(false);
-  const { content, setContent, imageURL, setImageURL, handleChange, loading } = useUploadImage();
+  const { content, setContent, file, handleFileChange, handleUpload, loading, error } = useUploadImage();
+  const [isRequestListOpen, setRequestListOpen] = useState(false)
 
-  const [isRequestListOpen,setRequestListOpen]=useState(false)
-  
   return (
     <>
       <aside className="w-64 h-screen bg-white border-r border-gray-200 fixed flex flex-col justify-between">
@@ -59,7 +58,7 @@ const Navbar = () => {
 
           <div className="p-6">
             <li className="flex items-center space-x-4">
-              <Link to={`/userprofile/${user.id}`} className="flex flex-row gap-4 items-center">
+              <Link to={`/userprofile/${user?.id}`} className="flex flex-row gap-4 items-center">
                 <img
                   src="https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png"
                   alt="Profile"
@@ -73,14 +72,25 @@ const Navbar = () => {
       </aside>
 
       <Modal isOpen={isRequestListOpen} onClose={() => setRequestListOpen(false)} title="Friend Requests">
-        <MyRequestList/>
+        <MyRequestList />
       </Modal>
 
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title="Create Post">
         <div className="border border-dashed border-black p-4 rounded-lg flex flex-col items-center gap-3 w-72 mx-auto mt-10">
-          <form onChange={handleChange} className="flex flex-col gap-2">
-            <input onChange={(e) => setImageURL(e.target.value)} type="url" className="border w-full rounded-md text-xs py-2 px-4" placeholder="Please provide Image URL" />
-            <input onChange={(e) => setContent(e.target.value)} type="text" className="border w-full rounded-md text-xs py-2 px-4" placeholder="Provide your caption" />
+          <form onSubmit={handleUpload} className="flex flex-col gap-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="border w-full rounded-md text-xs py-2 px-4"
+            />
+            <input
+              type="text"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="border w-full rounded-md text-xs py-2 px-4"
+              placeholder="Provide your caption"
+            />
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition cursor-pointer"
@@ -89,8 +99,10 @@ const Navbar = () => {
               {loading ? "Uploading..." : "Upload"}
             </button>
           </form>
+          {error && <p className="text-red-500 text-xs">{error?.message}</p>}
         </div>
       </Modal>
+
     </>
   );
 };

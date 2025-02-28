@@ -19,15 +19,12 @@ const GET_USER_PROFILE = gql`
 `;
 
 const useUserProfile = (id) => {
-  console.log(id);
-  
+
   const { loading, error, data } = useQuery(GET_USER_PROFILE, {
     variables: { id }
   });
 
 
-  console.log(data?.user);
-  
 
   return { loading, error, userProfile: data?.user };
 

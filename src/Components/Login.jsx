@@ -27,18 +27,18 @@ const Login = () => {
 
   const handleButtonClick = async (e) => {
     e.preventDefault();
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+    const email = emailRef?.current?.value;
+    const password = passwordRef?.current?.value;
 
     if (!email) {
       alert("Please enter the email!");
-      emailRef.current.focus();
+      emailRef?.current.focus();
       return;
     }
 
     if (!password) {
       alert("Please enter password");
-      passwordRef.current.focus();
+      passwordRef?.current.focus();
       return;
     }
 
@@ -59,7 +59,7 @@ const Login = () => {
         alert("Invalid login, please try again.");
       }
     } catch (err) {
-      console.error("Error during login:", err.message);
+      console.error("Error during login:", err?.message);
     }
   };
 
@@ -98,10 +98,10 @@ const Login = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          {error && <p className="text-red-500 text-sm text-center">Error: {error.message}</p>}
+          {error && <p className="text-red-500 text-sm text-center">Error: {error?.message}</p>}
           {data && (
             <p className="text-green-500 text-sm text-center">
-              Welcome, {user.userName}! You are logged in.
+              Welcome, {user?.userName}! You are logged in.
             </p>
           )}
         </form>

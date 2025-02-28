@@ -29,25 +29,25 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    const userName = usernameRef.current.value;
+    const email = emailRef?.current?.value;
+    const password = passwordRef?.current?.value;
+    const userName = usernameRef?.current?.value;
 
     if (!email) {
       alert("Please enter an email");
-      emailRef.current.focus();
+      emailRef?.current.focus();
       return;
     }
 
     if (!password) {
       alert("Please enter a password");
-      passwordRef.current.focus();
+      passwordRef?.current.focus();
       return;
     }
 
     if (!userName) {
       alert("Please enter a username");
-      usernameRef.current.focus();
+      usernameRef?.current.focus();
       return;
     }
 
@@ -67,10 +67,9 @@ const Register = () => {
       } else {
         alert("Please try again.");
       }
-      console.log("Signup Successful!", response.data);
 
     } catch (error) {
-      console.error("Error during registration:", error.message);
+      console.error("Error during registration:", error?.message);
     }
   };
 
@@ -115,7 +114,7 @@ const Register = () => {
           >
             {loading ? "Registering..." : "Sign Up"}
           </button>
-          {error && <p className="text-red-500 text-sm text-center">Error: {error.message}</p>}
+          {error && <p className="text-red-500 text-sm text-center">Error: {error?.message}</p>}
           {data && (
             <p className="text-green-500 text-sm text-center">
               Welcome, {user?.userName}! Happy to use StayIt.

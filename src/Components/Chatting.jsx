@@ -25,7 +25,7 @@ export default function Chatting() {
             <div className="flex-1 border p-4 mb-4 h-96 overflow-y-auto">
               {messages.map((msg, index) => (
                 <p key={index} className="mb-2">
-                  <strong>{msg.sender}: </strong> {msg.text}
+                  <strong>{msg?.sender}: </strong> {msg.text}
                 </p>
               ))}
             </div>

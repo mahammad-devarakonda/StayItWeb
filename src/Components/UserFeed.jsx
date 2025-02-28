@@ -8,20 +8,19 @@ const UserFeed = () => {
   const { loading, error, feed } = useFeed();
   const { handleFollowRequest } = useFollowRequest();
 
-
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
-  if (error) return <p className="text-center text-lg text-red-500">Error: {error.message}</p>;
+  if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
 
 
   return (
     <div className="flex flex-col items-center p-4 min-h-screen bg-white">
       {feed.map((user) => {
         return (
-          <div key={user.id} className="w-[600px] bg-white rounded-lg overflow-hidden">
+          <div key={user?.id} className="w-[600px] bg-white rounded-lg overflow-hidden">
             <div>
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                  <Link to={`/userprofile/${user.id}`}>
+                  <Link to={`/userprofile/${user?.id}`}>
                     <img
                       className="rounded-full w-10 h-10 object-cover"
                       src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -29,12 +28,12 @@ const UserFeed = () => {
                     />
                   </Link>
                   <p className="text-base font-semibold">
-                    <Link to={`/userprofile/${user.id}`}>{user.userName}</Link>
+                    <Link to={`/userprofile/${user?.id}`}>{user?.userName}</Link>
                   </p>
                 </div>
                 <button
                   className="text-blue-500 font-medium"
-                  onClick={() => handleFollowRequest(user.id)}
+                  onClick={() => handleFollowRequest(user?.id)}
                 >
                   Follow
                 </button>
@@ -42,7 +41,7 @@ const UserFeed = () => {
               
               <div className="flex flex-col items-start">
                 <img
-                  src={user.posts[0].imageURL}
+                  src={user?.posts[0]?.imageURL}
                   alt="User Post"
                   className="w-full h-[400px] object-contain"
                 />

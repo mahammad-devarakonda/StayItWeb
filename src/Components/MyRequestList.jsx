@@ -1,84 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import useReviewRequest from '../Hooks/useReviewRequest';
-import { useMutation, gql } from '@apollo/client';
+import React, { useState, useEffect } from "react";
+import { useMutation, gql } from "@apollo/client";
+import useReviewRequest from "../Hooks/useReviewRequest";
 
 const REVIEW_REQUEST_MUTATION = gql`
   mutation REVIEWREQUEST($requestedUser: ID!, $status: String!) {
     reviewRequestConnection(input: { requestedUser: $requestedUser, status: $status }) {
-      success 
+      success
       message
       request {
         toUser {
           id
           userName
-          email
         }
         status
-        timestamp
       }
     }
   }
 `;
 
 const MyRequestList = () => {
-  // Retrieve the list of connection requests from your custom hook
   const { data, loading, error } = useReviewRequest();
-  // Maintain local state for the list so we can update it after mutation
   const [requests, setRequests] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(new Set());
 
-  // Update local state once the data is fetched
   useEffect(() => {
     if (data?.myRequests) {
       setRequests(data.myRequests);
     }
   }, [data]);
 
-  const [reviewRequest] = useMutation(REVIEW_REQUEST_MUTATION);
+  const [reviewRequest] = useMutation(REVIEW_REQUEST_MUTATION, {
+    onError: (error) => {
+      toast.error(error.message || "Something went wrong!");
+    },
+  });
+
+  const handleAccept = async (userID) => {
+    setLoadingUsers((prev) => new Set(prev).add(userID));
+
+    try {
+      const { data } = await reviewRequest({
+        variables: { requestedUser: userID, status: "accepted" },
+      });
+
+      if (data?.reviewRequestConnection?.success) {
+        setRequests((prev) => prev.filter((req) => req.fromUser.id !== userID));
+        toast.success("Request accepted successfully!");
+      } else {
+        throw new Error(data?.reviewRequestConnection?.message || "Failed to accept request");
+      }
+    } catch (error) {
+      console.error("🚨 Mutation Failed:", error);
+    } finally {
+      setLoadingUsers((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(userID);
+        return newSet;
+      });
+    }
+  };
 
   if (loading) return <p className="text-gray-500 text-center">Loading...</p>;
   if (error) return <p className="text-red-500 text-center">Error: {error.message}</p>;
-
-  const handleAccept = async (userID) => {
-    try {
-      const { data: mutationData } = await reviewRequest({
-        variables: {
-          requestedUser: userID,
-          status: "accepted",
-        },
-      });
-      console.log("✅ Mutation Success:", mutationData);
-
-      // Remove the accepted request from the local state list
-      setRequests((prevRequests) =>
-        prevRequests.filter((request) => request.fromUser.id !== userID)
-      );
-    } catch (error) {
-      console.error("🚨 Mutation Failed:", error);
-      if (error.networkError) {
-        console.error("❌ Network Error:", error.networkError);
-      }
-      if (error.graphQLErrors) {
-        console.error("🛑 GraphQL Errors:", error.graphQLErrors);
-      }
-    }
-  };
 
   return (
     <div className="h-full">
       <h2 className="text-lg font-semibold mb-4">Connection Requests</h2>
       <ul className="space-y-3">
         {requests.length > 0 ? (
-          requests.map((user) => (
-            <li key={user.id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
+          requests.map(({ fromUser }) => (
+            <li key={fromUser.id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
               <div className="flex items-center gap-3">
-                <img className="w-10 h-10 rounded-full" src={user.profilePic} alt={user.name} />
-                <p className="text-base font-medium">{user.fromUser.userName}</p>
+                <img className="w-10 h-10 rounded-full" src={fromUser.profilePic} alt={fromUser.userName} />
+                <p className="text-base font-medium">{fromUser.userName}</p>
               </div>
               <button
-                onClick={() => handleAccept(user?.fromUser?.id)}
-                className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition cursor-pointer"
+                onClick={() => handleAccept(fromUser.id)}
+                disabled={loadingUsers.has(fromUser.id)}
+                className={`px-3 py-1 rounded-md transition cursor-pointer ${
+                  loadingUsers.has(fromUser.id)
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
               >
-                Accept
+                {loadingUsers.has(fromUser.id) ? "Processing..." : "Accept"}
               </button>
             </li>
           ))

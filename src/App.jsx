@@ -3,7 +3,7 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink,
+  createHttpLink
 } from "@apollo/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './Components/Login';
@@ -18,7 +18,7 @@ import Chatting from './Components/Chatting';
 import MyRequestList from './Components/MyRequestList';
 
 const httpLink=createHttpLink({
-  uri:"/api/graphql"
+  uri:"http://localhost:3001/graphql"
 })
 
 const authLink = setContext((_, { headers}) => {
