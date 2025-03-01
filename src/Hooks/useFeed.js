@@ -5,6 +5,7 @@ const GET_FEED = gql`
     feed {
       id
       userName
+      avatar
       posts {
         id
         content

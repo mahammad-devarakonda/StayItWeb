@@ -16,9 +16,10 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import {setContext} from "@apollo/client/link/context"
 import Chatting from './Components/Chatting';
 import MyRequestList from './Components/MyRequestList';
+import ErrorPage from './Components/Error';
 
 const httpLink=createHttpLink({
-  uri:"/api/graphql"
+  uri:"http://localhost:3001/graphql"
 })
 
 const authLink = setContext((_, { headers}) => {
@@ -44,14 +45,17 @@ const client = new ApolloClient({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />
+    element: <Login />,
+    errorElement:<ErrorPage/>
   },
   {
     path: '/register',
-    element: <Register />
+    element: <Register />,
+    errorElement:<ErrorPage/>
   },
   {
     element: <ProtectedRoute />,
+    errorElement:<ErrorPage/>,
     children: [
       {
         path: '/feed',
@@ -70,7 +74,11 @@ const router = createBrowserRouter([
         element:<MyRequestList/>
       },
     ],
-  }
+  },
+  {
+    path: '*',
+    element: <ErrorPage />,
+  },
 ])
 
 const Layout = () => {

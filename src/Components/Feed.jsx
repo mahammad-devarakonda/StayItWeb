@@ -1,22 +1,27 @@
-import React from 'react'
-import Navbar from './Navbar'
-import UserFeed from './UserFeed'
+import React, { useState } from "react";
+import Navbar from "./Navbar";
+import UserFeed from "./UserFeed";
 
 const Feed = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="flex w-full h-screen">
-  {/* Sidebar */}
-  <aside className="hidden md:flex md:w-1/4 lg:w-1/5 h-full text-center bg-gray-100">
-    <Navbar />
-  </aside>
+      <div
+        className="md:flex hidden h-full text-center bg-gray-100 transition-all duration-300"
+      >
+        <Navbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      </div>
 
-  {/* Main Content */}
-  <main className="w-full md:w-3/4 lg:w-4/5 h-full overflow-y-auto text-center">
-    <UserFeed />
-  </main>
-</div>
+      <main
+        className={`h-full overflow-y-auto transition-all duration-300 ${isCollapsed ? "w-[calc(100%-1px)]" : "w-[calc(100%-1px)]"
+          }`}
+      >
+        <UserFeed />
+      </main>
 
-  )
-}
+    </div>
+  );
+};
 
-export default Feed
+export default Feed;

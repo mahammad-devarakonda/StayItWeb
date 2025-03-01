@@ -7,6 +7,7 @@ const GET_USER_PROFILE = gql`
         id
         userName
         email
+        avatar
       }
       posts {
         id
@@ -24,12 +25,8 @@ const useUserProfile = (id) => {
     variables: { id }
   });
 
-
-
   return { loading, error, userProfile: data?.user };
 
-
-  
 };
 
 export default useUserProfile;
