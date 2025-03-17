@@ -6,6 +6,7 @@ const GET_FEED = gql`
       id
       userName
       avatar
+      bio
       posts {
         id
         content

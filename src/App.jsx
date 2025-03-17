@@ -19,7 +19,7 @@ import MyRequestList from './Components/MyRequestList';
 import ErrorPage from './Components/Error';
 
 const httpLink=createHttpLink({
-  uri:"http://localhost:3001/graphql"
+  uri:"api/graphql"
 })
 
 const authLink = setContext((_, { headers}) => {

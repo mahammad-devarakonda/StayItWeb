@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Navbar from "./Navbar";
 import UserFeed from "./UserFeed";
 
 const Feed = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const [isCollapsed, setIsCollapsed] = useState(
+    sessionStorage.getItem("isCollapsed") === "true"
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem("isCollapsed", isCollapsed);
+  }, [isCollapsed]);
 
   return (
     <div className="flex w-full h-screen">

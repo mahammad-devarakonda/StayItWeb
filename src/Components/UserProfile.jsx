@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import useUserProfile from "../Hooks/useUserProfile";
@@ -7,11 +7,20 @@ import Modal from "./Modal";
 const UserProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const [isCollapsed, setIsCollapsed] = useState(
+    sessionStorage.getItem("isCollapsed") === "true"
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem("isCollapsed", isCollapsed);
+  }, [isCollapsed]);
 
   const { id: userID } = useParams();
   const { loading, error, userProfile } = useUserProfile(userID);
   const user = userProfile?.user;
+  console.log(user);
+
   const posts = userProfile?.posts || []
 
   const loggedInUserID = sessionStorage.getItem("user");
@@ -74,9 +83,8 @@ const UserProfile = () => {
 
           {/* Bio */}
           <div className="mt-7 text-center md:text-left">
-            <h2 className="text-black font-semibold text-lg">Cinema Enthusiast 🎬</h2>
             <p className="text-gray-700 text-sm md:text-base mt-1">
-              I am that 'movie guy' in every friend group. <br /> 🎥 Love cinema? Follow for more!
+              {user?.bio}
             </p>
           </div>
 

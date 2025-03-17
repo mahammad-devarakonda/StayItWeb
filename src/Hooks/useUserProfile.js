@@ -8,6 +8,7 @@ const GET_USER_PROFILE = gql`
         userName
         email
         avatar
+        bio
       }
       posts {
         id

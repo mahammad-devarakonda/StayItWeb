@@ -44,12 +44,12 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
 
           <li className="flex items-center space-x-4 cursor-pointer">
-            <Heart className="w-6 h-6 flex-shrink-0" />
+            <Heart className="w-6 h-6 flex-shrink-0" onClick={() => setRequestListOpen(true)} />
             {!isCollapsed && <button onClick={() => setRequestListOpen(true)} className="font-semibold cursor-pointer">Requests</button>}
           </li>
 
           <li className="flex items-center space-x-4 cursor-pointer">
-            <PlusCircle className="w-6 h-6" />
+            <PlusCircle className="w-6 h-6" onClick={() => setModalOpen(true)}/>
             {!isCollapsed && <button onClick={() => setModalOpen(true)} className=" font-semibold cursor-pointer">
               Create
             </button>}
