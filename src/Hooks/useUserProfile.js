@@ -16,6 +16,7 @@ const GET_USER_PROFILE = gql`
         description
         imageURL
       }
+      connection
     }
   }
 `;

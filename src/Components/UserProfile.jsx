@@ -1,12 +1,13 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import Navbar from "./Navbar";
 import useUserProfile from "../Hooks/useUserProfile";
+import useMyConnections from "../Hooks/useMyConnections";
 import Modal from "./Modal";
 
 const UserProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showConnections, setShowConnections] = useState(false);
 
   const [isCollapsed, setIsCollapsed] = useState(
     sessionStorage.getItem("isCollapsed") === "true"
@@ -18,6 +19,7 @@ const UserProfile = () => {
 
   const { id: userID } = useParams();
   const { loading, error, userProfile } = useUserProfile(userID);
+  const { loading: connectionsLoading, error: connectionsError, connections } = useMyConnections();
   const user = userProfile?.user;
   console.log(user);
 
@@ -39,17 +41,19 @@ const UserProfile = () => {
     setModalOpen(false);
   };
 
+  const handleShowConnections = () => {
+    setShowConnections(true);
+  };
+
+  const handleCloseConnections = () => {
+    setShowConnections(false);
+  };
+
   return (
     <div className="flex w-full h-screen">
-      <aside className={`h-full bg-gray-100 transition-all duration-300 border-r border-gray-300 ${isCollapsed ? "w-16" : "w-60"}`}>
-        <Navbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      </aside>
-
-
       <main className="flex-1 p-6 overflow-y-auto min-w-0 transition-all duration-300">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
-            {/* Profile Image */}
             <div className="relative mb-5 md:mb-0">
               <img
                 className="rounded-full h-32 w-32 md:h-40 md:w-40 object-cover border border-gray-300 shadow-md"
@@ -76,7 +80,12 @@ const UserProfile = () => {
               {/* Post & Connections Count */}
               <div className="flex justify-center md:justify-start space-x-6 text-gray-700 text-sm md:text-lg">
                 <p><span className="font-semibold">{posts.length}</span> Posts</p>
-                <p><span className="font-semibold">4</span> Connections</p>
+                <button
+                  onClick={handleShowConnections}
+                  className="cursor-pointer"
+                >
+                  <span className="font-semibold">{userProfile?.connection}</span> Connections
+                </button>
               </div>
             </div>
           </div>
@@ -121,6 +130,27 @@ const UserProfile = () => {
             </div>
           )}
         </Modal>
+
+        <Modal isOpen={showConnections} onClose={handleCloseConnections} modalClassName="w-[300px] h-auto rounded-lg p-6">
+          <h2 className="text-lg font-semibold mb-4">Connections</h2>
+          {connectionsLoading ? (
+            <p>Loading...</p>
+          ) : connectionsError ? (
+            <p className="text-red-500">{connectionsError.message}</p>
+          ) : connections.length ? (
+            <ul className="space-y-2">
+              {connections.map((connection) => (
+                <li key={connection.id} className="flex items-center space-x-3">
+                  <img src={connection.avatar} alt={connection.userName} className="w-10 h-10 rounded-full" />
+                  <p className="text-gray-700 font-medium">{connection.userName}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No connections available</p>
+          )}
+        </Modal>
+
       </main>
 
     </div>

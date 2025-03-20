@@ -65,7 +65,7 @@ const MyRequestList = () => {
 
   return (
     <div className="h-full">
-      <h2 className="text-lg font-semibold mb-4">Connection Requests</h2>
+      <h2 className="text-lg font-semibold mb-4 px-7">Connection Requests</h2>
       <ul className="space-y-3">
         {requests.length > 0 ? (
           requests.map(({ fromUser }) => (
@@ -88,7 +88,7 @@ const MyRequestList = () => {
             </li>
           ))
         ) : (
-          <p className="text-gray-500 text-center">No requests available</p>
+          <p className="text-gray-500 text-center p-4">No requests available</p>
         )}
       </ul>
     </div>

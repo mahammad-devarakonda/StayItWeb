@@ -28,17 +28,17 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
       <nav className="flex flex-col flex-grow justify-between items-start px-3">
         <ul className="space-y-9 px-2 text-base items-center">
           <li className="flex items-center space-x-4">
-            <Home className="w-6 h-6 flex-shrink-0 cursor-pointer" />
+            <Link to="/feed"><Home className="w-6 h-6 flex-shrink-0 cursor-pointer" /></Link>
             {!isCollapsed && <Link to="/feed" className="font-semibold cursor-pointer">Home</Link>}
           </li>
 
           <li className="flex items-center space-x-4">
-            <Compass className="w-6 h-6 flex-shrink-0 cursor-pointer" />
+            <Link to="/explore"><Compass className="w-6 h-6 flex-shrink-0 cursor-pointer" /></Link>
             {!isCollapsed && <Link to="/explore" className="font-semibold cursor-pointer">Explore</Link>}
           </li>
 
           <li className="flex items-center space-x-4 relative">
-            <MessageCircle className="w-6 h-6 flex-shrink-0 cursor-pointer" />
+            <Link to="/inbox" ><MessageCircle className="w-6 h-6 flex-shrink-0 cursor-pointer" /></Link>
             <span className="absolute -top-2 left-5 bg-red-500 text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">5</span>
             {!isCollapsed && <Link to="/inbox" className="font-semibold cursor-pointer">Messages</Link>}
           </li>
@@ -49,7 +49,7 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
 
           <li className="flex items-center space-x-4 cursor-pointer">
-            <PlusCircle className="w-6 h-6" onClick={() => setModalOpen(true)}/>
+            <PlusCircle className="w-6 h-6" onClick={() => setModalOpen(true)} />
             {!isCollapsed && <button onClick={() => setModalOpen(true)} className=" font-semibold cursor-pointer">
               Create
             </button>}
