@@ -38,10 +38,16 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
 
           <li className="flex items-center space-x-4 relative">
-            <Link to="/inbox" ><MessageCircle className="w-6 h-6 flex-shrink-0 cursor-pointer" /></Link>
-            <span className="absolute -top-2 left-5 bg-red-500 text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">5</span>
-            {!isCollapsed && <Link to="/inbox" className="font-semibold cursor-pointer">Messages</Link>}
+            <Link to="/inbox">
+              <MessageCircle className="w-6 h-6 flex-shrink-0 cursor-pointer" />
+            </Link>
+            {!isCollapsed && (
+              <Link to="/inbox" className="font-semibold cursor-pointer">
+                Messages
+              </Link>
+            )}
           </li>
+
 
           <li className="flex items-center space-x-4 cursor-pointer">
             <Heart className="w-6 h-6 flex-shrink-0" onClick={() => setRequestListOpen(true)} />

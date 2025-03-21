@@ -70,6 +70,10 @@ const router = createBrowserRouter([
         element:<Inbox/>
       },
       {
+        path: '/inbox/:chatId', 
+        element: <Inbox />,
+      },
+      {
         path:'requests',
         element:<MyRequestList/>
       },

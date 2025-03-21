@@ -19,10 +19,10 @@ const UserProfile = () => {
 
   const { id: userID } = useParams();
   const { loading, error, userProfile } = useUserProfile(userID);
-  const { loading: connectionsLoading, error: connectionsError, connections } = useMyConnections();
-  const user = userProfile?.user;
-  console.log(user);
+  const { loading: connectionsLoading, error: connectionsError, connections } = useMyConnections(userID);
 
+
+  const user = userProfile?.user;
   const posts = userProfile?.posts || []
 
   const loggedInUserID = sessionStorage.getItem("user");
@@ -137,7 +137,7 @@ const UserProfile = () => {
             <p>Loading...</p>
           ) : connectionsError ? (
             <p className="text-red-500">{connectionsError.message}</p>
-          ) : connections.length ? (
+          ) : connections?.length ? (
             <ul className="space-y-2">
               {connections.map((connection) => (
                 <li key={connection.id} className="flex items-center space-x-3">
@@ -150,6 +150,7 @@ const UserProfile = () => {
             <p className="text-gray-500">No connections available</p>
           )}
         </Modal>
+
 
       </main>
 
