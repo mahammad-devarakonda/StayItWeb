@@ -1,5 +1,8 @@
-import io from "socket.io-client"
+import io from "socket.io-client";
 
-export const createSocketConnection=()=>{
-    return io("http://localhost:3001/graphql")
-}
+export const createSocketConnection = () => {
+    return io("http://localhost:3001", {
+        transports: ["websocket"],
+        withCredentials: true,
+    });
+};
