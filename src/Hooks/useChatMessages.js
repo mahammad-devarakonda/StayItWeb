@@ -23,7 +23,6 @@ const useChat = (chatId) => {
     const { data, loading, error } = useQuery(GET_CHAT, {
         variables: { id: chatId },
     });
-
     return { data, loading, error };
 };
 
