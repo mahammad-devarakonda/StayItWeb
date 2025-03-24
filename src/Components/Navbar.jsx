@@ -7,7 +7,7 @@ import useUploadImage from "../Hooks/useUploadImage";
 import MyRequestList from "./MyRequestList";
 
 const Navbar = ({ isCollapsed, setIsCollapsed }) => {
-  const user = useSelector((state) => state.user);
+  const authData=useSelector((state)=>state.auth)
   const { content, setContent, handleFileChange, handleUpload, loading, error } = useUploadImage();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isRequestListOpen, setRequestListOpen] = useState(false);
@@ -63,9 +63,9 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
         </ul>
 
         <div className="py-4">
-          <Link to={`/userprofile/${user?.id}`} className="flex items-center space-x-4 flex-nowrap">
-            <img src={user?.avatar} alt="User Avatar" className="w-8 h-8 rounded-full flex-shrink-0 min-w-[32px]" />
-            {!isCollapsed && <p className="text-lg font-semibold whitespace-nowrap">{user?.userName}</p>}
+          <Link to={`/userprofile/${authData?.user?.id}`} className="flex items-center space-x-4 flex-nowrap">
+            <img src={authData?.user?.avatar} alt="User Avatar" className="w-8 h-8 rounded-full flex-shrink-0 min-w-[32px]" />
+            {!isCollapsed && <p className="text-lg font-semibold whitespace-nowrap">{authData?.user?.userName}</p>}
           </Link>
         </div>
 

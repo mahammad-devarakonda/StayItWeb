@@ -11,7 +11,7 @@ import ChatWindow from './ChatWindow';
 const Inbox = () => {
     const [selectedChatUser, setSelectedChatUser] = useState(null);
     const [message, setMessage] = useState("");
-    const { id, userName } = useSelector((state) => state.user);
+    const { user:{userName,id} } = useSelector((state) => state.auth);
     const { connections } = useMyConnections(id);
     const navigate = useNavigate();
     const [socket, setSocket] = useState(null);

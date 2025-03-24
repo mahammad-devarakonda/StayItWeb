@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addUser } from "../Redux/userSlice";
+import { loginSuccess } from '../Redux/authSlice'
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
@@ -23,7 +23,8 @@ const Login = () => {
   const passwordRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const { user, token, isAuthenticated } = useSelector((state) => state.auth);
+  console.log("Redux State:", { user, token, isAuthenticated });
   const [login, { loading, error, data }] = useMutation(LOGIN);
 
   const handleButtonClick = async (e) => {
@@ -53,12 +54,15 @@ const Login = () => {
 
       sessionStorage.setItem("token", token);
 
+
       if (token && userData) {
-        dispatch(addUser(userData));
+        sessionStorage.setItem("token", token);
+        dispatch(loginSuccess({ user: userData, token }));
         navigate('/feed');
       } else {
         alert("Invalid login, please try again.");
       }
+
     } catch (err) {
       console.error("Error during login:", err?.message);
     }

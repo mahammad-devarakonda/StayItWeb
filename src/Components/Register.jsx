@@ -2,7 +2,8 @@ import React, { useRef } from 'react'
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser } from "../Redux/userSlice";
+import { loginSuccess } from '../Redux/authSlice'
+
 
 const REGISTER = gql`
   mutation REGISTER($email:String!,$password:String!,$userName:String!){
@@ -62,12 +63,12 @@ const Register = () => {
       sessionStorage.setItem("token", token);
 
       if (token && userData) {
-        dispatch(addUser(userData)); // Save user in Redux
-        navigate('/feed'); // Navigate to feed after successful registration
+        sessionStorage.setItem("token", token);
+        dispatch(loginSuccess({ user: userData, token }));
+        navigate('/feed');
       } else {
-        alert("Please try again.");
+        alert("Invalid login, please try again.");
       }
-
     } catch (error) {
       console.error("Error during registration:", error?.message);
     }
@@ -108,8 +109,8 @@ const Register = () => {
             type="password"
             placeholder="Password"
           />
-          <button 
-            disabled={loading} 
+          <button
+            disabled={loading}
             className="bg-red-500 text-white py-2 rounded-md hover:bg-red-600 disabled:bg-gray-400 cursor-pointer text-center"
           >
             {loading ? "Registering..." : "Sign Up"}

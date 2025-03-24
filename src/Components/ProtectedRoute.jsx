@@ -4,12 +4,7 @@ import Navbar from "./Navbar"; // Import Navbar
 
 const ProtectedRoute = () => {
   const token = sessionStorage.getItem("token");
-  console.log(token);
-  
   const isAuthenticated = !!token;
-
-  console.log(isAuthenticated);
-  
   const location=useLocation()
 
   const [isCollapsed, setIsCollapsed] = useState(

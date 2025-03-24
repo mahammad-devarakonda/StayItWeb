@@ -7,6 +7,8 @@ import Modal from "./Modal";
 
 const UserFeed = () => {
   const { loading, error, feed } = useFeed();
+  console.log(feed);
+  
   const { handleFollowRequest } = useFollowRequest();
   const [isModalOpen, setModalOpen] = useState(false)
   const [data, setData] = useState(null)

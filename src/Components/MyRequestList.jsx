@@ -21,13 +21,19 @@ const REVIEW_REQUEST_MUTATION = gql`
 const MyRequestList = () => {
   const { data, loading, error } = useReviewRequest();
   const [requests, setRequests] = useState([]);
+  console.log(requests);
+
   const [loadingUsers, setLoadingUsers] = useState(new Set());
 
   useEffect(() => {
+    console.log("Fetched Data:", data);
     if (data?.myRequests) {
       setRequests(data.myRequests);
+    } else {
+      console.warn("myRequests is undefined or empty:", data);
     }
   }, [data]);
+  
 
   const [reviewRequest] = useMutation(REVIEW_REQUEST_MUTATION, {
     onError: (error) => {
@@ -68,28 +74,30 @@ const MyRequestList = () => {
       <h2 className="text-lg font-semibold mb-4 px-7">Connection Requests</h2>
       <ul className="space-y-3">
         {requests.length > 0 ? (
-          requests.map(({ fromUser }) => (
-            <li key={fromUser.id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
-              <div className="flex items-center gap-3">
-                <img className="w-10 h-10 rounded-full" src={fromUser.profilePic} alt={fromUser.userName} />
-                <p className="text-base font-medium">{fromUser.userName}</p>
-              </div>
-              <button
-                onClick={() => handleAccept(fromUser.id)}
-                disabled={loadingUsers.has(fromUser.id)}
-                className={`px-3 py-1 rounded-md transition cursor-pointer ${
-                  loadingUsers.has(fromUser.id)
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                {loadingUsers.has(fromUser.id) ? "Processing..." : "Accept"}
-              </button>
-            </li>
-          ))
+          requests.map(({ fromUser }) =>
+            fromUser ? (
+              <li key={fromUser.id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
+                <div className="flex items-center gap-3">
+                  <img className="w-10 h-10 rounded-full" src={fromUser.profilePic} alt={fromUser.userName} />
+                  <p className="text-base font-medium">{fromUser.userName}</p>
+                </div>
+                <button
+                  onClick={() => handleAccept(fromUser.id)}
+                  disabled={loadingUsers.has(fromUser.id)}
+                  className={`px-3 py-1 rounded-md transition cursor-pointer ${loadingUsers.has(fromUser.id)
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                >
+                  {loadingUsers.has(fromUser.id) ? "Processing..." : "Accept"}
+                </button>
+              </li>
+            ) : null
+          )
         ) : (
           <p className="text-gray-500 text-center p-4">No requests available</p>
         )}
+
       </ul>
     </div>
   );

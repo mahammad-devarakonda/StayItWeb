@@ -3,11 +3,13 @@ import { useParams, Link } from "react-router-dom";
 import useUserProfile from "../Hooks/useUserProfile";
 import useMyConnections from "../Hooks/useMyConnections";
 import Modal from "./Modal";
+import {useSelector} from "react-redux"
 
 const UserProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showConnections, setShowConnections] = useState(false);
+  const authData=useSelector((state)=>state.auth)
 
   const [isCollapsed, setIsCollapsed] = useState(
     sessionStorage.getItem("isCollapsed") === "true"
@@ -25,8 +27,11 @@ const UserProfile = () => {
   const user = userProfile?.user;
   const posts = userProfile?.posts || []
 
-  const loggedInUserID = sessionStorage.getItem("user");
-  const parsedUser = JSON.parse(loggedInUserID);
+
+
+  const loggedInUser = authData?.user
+  console.log(loggedInUser);
+  
 
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
@@ -66,7 +71,7 @@ const UserProfile = () => {
             <div className="flex flex-col space-y-4 text-center md:text-left">
               <div className="flex flex-col md:flex-row items-center md:space-x-6">
                 <h1 className="text-black text-xl md:text-2xl font-semibold">{user?.userName}</h1>
-                {parsedUser.id !== userID && (
+                {loggedInUser.id !== userID && (
                   <Link
                     to={`/inbox/${userID}`}
                     state={{ user }}
