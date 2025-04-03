@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MessageCircle, Send } from "lucide-react";
-import { createSocketConnection } from '../utills';
+import { createSocketConnection } from '../Utills/Socket';
 import useMyConnections from '../Hooks/useMyConnections';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';

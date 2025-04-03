@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, Outlet,useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar"; // Import Navbar
+import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
-  const token = sessionStorage.getItem("token");
-  const isAuthenticated = !!token;
-  const location=useLocation()
+  const { token } = useSelector((state) => state.auth)
+  console.log(token);
+
+  const isAuthenticated = !!token
+  console.log(isAuthenticated);
+
+  const location = useLocation()
 
   const [isCollapsed, setIsCollapsed] = useState(
 
-    
+
     sessionStorage.getItem("isCollapsed") === "true"
   );
 
+ 
   useEffect(() => {
-    if (location.pathname === "/inbox") {
+    if (location.pathname === "/inbox" || "/inbox/:id") {
       setIsCollapsed(true);
+    }else{
+      setIsCollapsed(false);
     }
   }, [location.pathname]);
 

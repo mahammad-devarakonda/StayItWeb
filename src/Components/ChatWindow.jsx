@@ -37,11 +37,6 @@ const ChatWindow = ({ selectedChatUser, messages, setMessages, socket, id, userN
                                             <p className="text-sm">{msg?.message || msg.text}</p>
                                         </div>
                                     </motion.div>
-
-                                    {/* Sender Username */}
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        {msg?.sender?.id === id ? "You" : msg?.sender?.userName || "Unknown"}
-                                    </p>
                                 </div>
                             ))
                         )}

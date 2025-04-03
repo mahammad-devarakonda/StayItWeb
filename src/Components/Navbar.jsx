@@ -17,15 +17,11 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
       className={`h-screen bg-white border-r border-gray-200 fixed flex flex-col justify-between transition-all duration-300 overflow-hidden ${isCollapsed ? "w-16" : "w-64"
         }`}
     >
-
-      <div className="p-4 flex justify-between items-center px-3">
-        {!isCollapsed && <h1 className="text-2xl font-medium font-serif tracking-widest">StayIt</h1>}
-        <button onClick={() => setIsCollapsed(!isCollapsed)} className="p-2 focus:outline-none">
-          <Menu className="w-6 h-6 flex-shrink-0 cursor-pointer" />
-        </button>
+      <div className="flex justify-between items-center px-4 py-3">
+        {!isCollapsed ? <h1 className="text-2xl font-medium font-serif tracking-widest">StayIt</h1> :<h1 className="text-2xl font-medium font-serif tracking-widest text-center">ST</h1>}
       </div>
 
-      <nav className="flex flex-col flex-grow justify-between items-start px-3">
+      <nav className="flex flex-col flex-grow justify-between items-start px-3 mt-10">
         <ul className="space-y-9 px-2 text-base items-center">
           <li className="flex items-center space-x-4">
             <Link to="/feed"><Home className="w-6 h-6 flex-shrink-0 cursor-pointer" /></Link>

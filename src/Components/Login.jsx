@@ -1,19 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { loginSuccess } from '../Redux/authSlice'
+import { Eye, EyeOff } from "lucide-react";
+
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      token
-      user {
-        id
-        userName
-        email
-        avatar
-      }
+     message
     }
   }
 `;
@@ -23,9 +19,9 @@ const Login = () => {
   const passwordRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, token, isAuthenticated } = useSelector((state) => state.auth);
-  console.log("Redux State:", { user, token, isAuthenticated });
+  const { user } = useSelector((state) => state.auth);
   const [login, { loading, error, data }] = useMutation(LOGIN);
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleButtonClick = async (e) => {
     e.preventDefault();
@@ -49,24 +45,19 @@ const Login = () => {
         variables: { email, password },
       });
 
-      const token = response?.data?.login?.token;
-      const userData = response?.data?.login?.user;
+      console.log(response);
 
-      sessionStorage.setItem("token", token);
-
-
-      if (token && userData) {
-        sessionStorage.setItem("token", token);
-        dispatch(loginSuccess({ user: userData, token }));
-        navigate('/feed');
+      if (response?.data?.login?.message) {
+        alert(response?.data?.login?.message);
+        navigate('/2FA', { state: { email } });
       } else {
-        alert("Invalid login, please try again.");
+        alert("Login failed. Please try again.");
       }
-
     } catch (err) {
       console.error("Error during login:", err?.message);
     }
   };
+
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-4 sm:p-6 md:p-8"
@@ -79,7 +70,6 @@ const Login = () => {
     >
       <div className="w-full max-w-sm sm:max-w-md md:max-w-md">
         <form
-          onSubmit={handleButtonClick}
           className="flex flex-col border border-gray-300 rounded-2xl gap-4 sm:gap-6 p-6 sm:p-8 shadow-lg bg-white"
         >
           <h1 className="text-xl sm:text-2xl font-medium font-serif text-left tracking-widest">
@@ -90,23 +80,30 @@ const Login = () => {
             ref={emailRef}
             type="email"
             placeholder="Email or Username"
+            aria-label="Email or Username"
           />
-          <input
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-green-200"
-            ref={passwordRef}
-            type="password"
-            placeholder="Password"
-          />
+
+          <div className="w-full relative">
+            <input
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-green-200"
+              ref={passwordRef}
+              type={!showPassword ? "password" : "text"}
+              placeholder="Password"
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <Eye className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" /> : <EyeOff className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" />}</button>
+          </div>
+
           <button
             disabled={loading}
+            onClick={handleButtonClick}
             className="bg-red-500 text-white py-2 rounded-md hover:bg-red-600 disabled:bg-gray-400 cursor-pointer text-center"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          {error && <p className="text-red-500 text-sm text-center">Error: {error?.message}</p>}
+          {error && <p className="text-red-500 text-sm text-center">Error: {/* {error?.message} */}</p>}
           {data && (
             <p className="text-green-500 text-sm text-center">
-              Welcome, {user?.userName}! You are logged in.
+              Welcome,! You are logged in.
             </p>
           )}
         </form>

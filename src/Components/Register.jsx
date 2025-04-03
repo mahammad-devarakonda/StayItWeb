@@ -1,19 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useRef,useState } from 'react'
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess } from '../Redux/authSlice'
+import { useSelector } from 'react-redux';
+import { Eye, EyeOff } from "lucide-react";
+
 
 
 const REGISTER = gql`
   mutation REGISTER($email:String!,$password:String!,$userName:String!){
     register(email: $email, password: $password , userName: $userName){
-      token
-      user {
-        id
-        userName
-        email
-      }
+      message
     }
   }
 `;
@@ -24,8 +20,8 @@ const Register = () => {
   const usernameRef = useRef();
   const navigate = useNavigate();
   const [register, { loading, data, error }] = useMutation(REGISTER);
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -57,17 +53,11 @@ const Register = () => {
         variables: { userName, email, password },
       });
 
-      const token = response?.data?.register?.token;
-      const userData = response?.data?.register?.user;
-
-      sessionStorage.setItem("token", token);
-
-      if (token && userData) {
-        sessionStorage.setItem("token", token);
-        dispatch(loginSuccess({ user: userData, token }));
-        navigate('/feed');
+      if (response?.data?.register?.message) {
+        alert(response?.data?.login?.message);
+        navigate('/2FA', { state: { email } });
       } else {
-        alert("Invalid login, please try again.");
+        alert("Failed to register");
       }
     } catch (error) {
       console.error("Error during registration:", error?.message);
@@ -85,7 +75,6 @@ const Register = () => {
     >
       <div className="w-full max-w-sm sm:max-w-md md:max-w-mg">
         <form
-          onSubmit={handleRegister}
           className="flex flex-col border border-gray-300 rounded-2xl gap-4 sm:gap-6 p-6 sm:p-8 shadow-lg bg-white"
         >
           <h1 className="text-xl sm:text-2xl font-medium font-serif text-left tracking-widest">
@@ -103,14 +92,18 @@ const Register = () => {
             type="email"
             placeholder="Email"
           />
-          <input
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-green-200"
-            ref={passwordRef}
-            type="password"
-            placeholder="Password"
-          />
+          <div className="w-full relative">
+            <input
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-green-200"
+              ref={passwordRef}
+              type={!showPassword ? "password" : "text"}
+              placeholder="Password"
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <Eye className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" /> : <EyeOff className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" />}</button>
+          </div>
           <button
             disabled={loading}
+            onClick={handleRegister}
             className="bg-red-500 text-white py-2 rounded-md hover:bg-red-600 disabled:bg-gray-400 cursor-pointer text-center"
           >
             {loading ? "Registering..." : "Sign Up"}
