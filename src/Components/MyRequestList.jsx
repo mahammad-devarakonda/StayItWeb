@@ -21,12 +21,10 @@ const REVIEW_REQUEST_MUTATION = gql`
 const MyRequestList = () => {
   const { data, loading, error } = useReviewRequest();
   const [requests, setRequests] = useState([]);
-  console.log(requests);
 
   const [loadingUsers, setLoadingUsers] = useState(new Set());
 
   useEffect(() => {
-    console.log("Fetched Data:", data);
     if (data?.myRequests) {
       setRequests(data.myRequests);
     } else {

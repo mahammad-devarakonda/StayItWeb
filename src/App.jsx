@@ -15,7 +15,7 @@ import router from './Utills/Route';
 
 
 const httpLink = createHttpLink({
-  uri: "api/graphql"
+  uri: "http://localhost:3001/graphql"
 })
 
 const authLink = setContext((_, { headers }) => {

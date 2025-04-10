@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const GRAPHQL_ENDPOINT = "http://localhost:3001/graphql"; // Ensure this matches your server
+const GRAPHQL_ENDPOINT = "http://localhost:3001/graphql";
 
 const ADD_POST_MUTATION = `
   mutation AddPost($file: Upload!, $content: String!) {
@@ -22,7 +22,7 @@ const useUploadImage = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -31,7 +31,6 @@ const useUploadImage = () => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-  
     if (!file || !content) {
       console.error("Both content and file are required!");
       return;
@@ -41,8 +40,8 @@ const useUploadImage = () => {
     setError(null);
 
     try {
-      const token = sessionStorage.getItem("token"); // ✅ Get Auth Token
-
+      const token = sessionStorage.getItem("token");
+      
       const formData = new FormData();
       formData.append("operations", JSON.stringify({
         query: ADD_POST_MUTATION,
@@ -55,17 +54,14 @@ const useUploadImage = () => {
         method: "POST",
         body: formData,
         headers: {
-          "Authorization": token ? `Bearer ${token}` : "", // ✅ Include Authentication Header
+          "Authorization": token ? `Bearer ${token}` : ""
         },
       });
 
       const result = await response.json();
-      
       if (result?.errors) {
-        throw new Error(result?.errors[0]?.message);
+        throw new Error(result.errors[0].message);
       }
-  
-      // Reset form after successful upload
       setContent("");
       setFile(null);
     } catch (err) {
@@ -76,7 +72,15 @@ const useUploadImage = () => {
     }
   };
 
-  return { content, setContent, file, handleFileChange, handleUpload, loading, error };
+  return {
+    content,
+    setContent,
+    file,
+    handleFileChange,
+    handleUpload,
+    loading,
+    error
+  };
 };
 
 export default useUploadImage;

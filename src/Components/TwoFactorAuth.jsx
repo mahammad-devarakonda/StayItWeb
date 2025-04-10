@@ -29,7 +29,6 @@ const OTPInput = ({ length = 4 }) => {
   const navigate=useNavigate()
 
 
-  console.log("Sending to backend ->", { email, otp });
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;

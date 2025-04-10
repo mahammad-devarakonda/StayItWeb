@@ -22,15 +22,6 @@ const REVIEW_REQUEST = gql`
 
 const useReviewRequest=()=>{
     const {data,loading,error}=useQuery(REVIEW_REQUEST)
-
-    console.log(data);
-
-    console.log("📡 Fetching Data...");
-    console.log("Loading:", loading);
-    console.log("Error:", error);
-    console.log("Data:", data);
-    
-
     return {data,loading,error}
 }
 
