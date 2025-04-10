@@ -1,4 +1,5 @@
 import { useQuery, gql } from "@apollo/client";
+import UserProfile from "../Components/UserProfile";
 
 const GET_USER_PROFILE = gql`
   query GetUserProfile($id: ID!) {
@@ -13,7 +14,6 @@ const GET_USER_PROFILE = gql`
       posts {
         id
         content
-        description
         imageURL
       }
       connection
@@ -22,13 +22,17 @@ const GET_USER_PROFILE = gql`
 `;
 
 const useUserProfile = (id) => {
-
   const { loading, error, data } = useQuery(GET_USER_PROFILE, {
-    variables: { id }
+    variables: { id },
+    skip: !id,
   });
 
-  return { loading, error, userProfile: data?.user };
 
+  return {
+    loading,
+    error,
+    userProfile:data
+  };
 };
 
 export default useUserProfile;

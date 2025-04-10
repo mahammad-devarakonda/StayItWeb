@@ -23,16 +23,9 @@ const UserProfile = () => {
   const { loading, error, userProfile } = useUserProfile(userID);
   const { loading: connectionsLoading, error: connectionsError, connections } = useMyConnections(userID);
 
-
-  const user = userProfile?.user;
-  const posts = userProfile?.posts || []
-
-
-
+  const user = userProfile?.user?.user
+  const posts = userProfile?.user?.posts || []
   const loggedInUser = authData?.user
-  console.log(loggedInUser);
-  
-
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
 
@@ -89,7 +82,7 @@ const UserProfile = () => {
                   onClick={handleShowConnections}
                   className="cursor-pointer"
                 >
-                  <span className="font-semibold">{userProfile?.connection}</span> Connections
+                  <span className="font-semibold">{userProfile?.user?.connection}</span> Connections
                 </button>
               </div>
             </div>
@@ -122,7 +115,6 @@ const UserProfile = () => {
           </div>
         </div>
 
-        {/* Modal for Enlarged Image */}
         <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalClassName="w-[600px] h-auto rounded-lg p-6">
           {selectedImage && (
             <div className="flex flex-col p-2">

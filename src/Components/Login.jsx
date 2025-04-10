@@ -45,8 +45,6 @@ const Login = () => {
         variables: { email, password },
       });
 
-      console.log(response);
-
       if (response?.data?.login?.message) {
         alert(response?.data?.login?.message);
         navigate('/2FA', { state: { email } });
@@ -100,7 +98,7 @@ const Login = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          {error && <p className="text-red-500 text-sm text-center">Error: {/* {error?.message} */}</p>}
+          {error && <p className="text-red-500 text-sm text-center">Error: {error?.message}</p>}
           {data && (
             <p className="text-green-500 text-sm text-center">
               Welcome,! You are logged in.

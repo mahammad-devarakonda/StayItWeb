@@ -24,9 +24,12 @@ const OTPInput = ({ length = 4 }) => {
   const arrayRef = useRef([]);
   const location = useLocation();
   const email = location.state?.email || "";
-  const otp = inputArray.join(""); 
+  const otp = inputArray.join("").trim();
   const dispatch=useDispatch()
   const navigate=useNavigate()
+
+
+  console.log("Sending to backend ->", { email, otp });
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
@@ -58,6 +61,7 @@ const OTPInput = ({ length = 4 }) => {
       
       
       dispatch(loginSuccess({ user: userData, token }));
+      sessionStorage.setItem("token",token)
       navigate('/feed')
     } catch (err) {
       console.error("OTP Verification Failed:", err);

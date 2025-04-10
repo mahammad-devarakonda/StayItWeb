@@ -7,77 +7,105 @@ import Modal from "./Modal";
 
 const UserFeed = () => {
   const { loading, error, feed } = useFeed();
-  console.log(feed);
-  
   const { handleFollowRequest } = useFollowRequest();
-  const [isModalOpen, setModalOpen] = useState(false)
-  const [data, setData] = useState(null)
 
-  const handleOpenImage = (imageURL,user) => {
-    setData({imageURL,user});
+  const [requestedIds, setRequestedIds] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [data, setData] = useState(null);
+
+  const handleOpenImage = (imageURL, user) => {
+    setData({ imageURL, user });
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setData(null)
-    setModalOpen(false)
-  }
+    setData(null);
+    setModalOpen(false);
+  };
+
+  const handleFollowClick = (id) => {
+    setRequestedIds((prev) => [...prev, id]);
+    handleFollowRequest(id); // Call API
+  };
 
   if (loading) return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">Error: {error?.message}</p>;
 
   return (
     <div className="flex flex-col items-center p-4 min-h-screen">
-      {feed.map((user) => (
-        <div
-          key={user?.id}
-          className="w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden mb-6"
-        >
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center gap-4">
-              <Link to={`/userprofile/${user?.id}`} className="hover:opacity-80 transition">
-                <img
-                  className="rounded-full w-12 h-12 object-cover border border-gray-300"
-                  src={user?.avatar}
-                  alt={`${user?.userName} avatar`}
-                />
-              </Link>
-              <p className="text-base font-semibold">
-                <Link to={`/userprofile/${user?.id}`} className="hover:underline">
-                  {user?.userName}
+      {feed.map((user) => {
+        const isRequested = user.connectionStatus === "interested" || requestedIds.includes(user.id);
+
+        return (
+          <div
+            key={user?.id}
+            className="w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden mb-6"
+          >
+            <div className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-4">
+                <Link to={`/userprofile/${user?.id}`} className="hover:opacity-80 transition">
+                  <img
+                    className="rounded-full w-12 h-12 object-cover border border-gray-300"
+                    src={user?.avatar}
+                    alt={`${user?.userName} avatar`}
+                  />
                 </Link>
+                <p className="text-base font-semibold">
+                  <Link to={`/userprofile/${user?.id}`} className="hover:underline">
+                    {user?.userName}
+                  </Link>
+                </p>
+              </div>
+
+
+              <button
+                disabled={
+                  user.connectionStatus === "interested" ||
+                  user.connectionStatus === "accepted" ||
+                  requestedIds.includes(user.id)
+                }
+                className={`text-sm px-4 py-2 rounded-md transition ${user.connectionStatus === "accepted"
+                    ? "bg-green-500 text-white cursor-default"
+                    : user.connectionStatus === "interested" || requestedIds.includes(user.id)
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "text-blue-500 hover:bg-blue-100"
+                  }`}
+                onClick={() => handleFollowClick(user.id)}
+              >
+                {user.connectionStatus === "accepted"
+                  ? "Friends"
+                  : user.connectionStatus === "interested" || requestedIds.includes(user.id)
+                    ? "Requested"
+                    : "Follow"}
+              </button>
+
+
+            </div>
+
+            {user?.posts[0]?.imageURL && (
+              <img
+                src={user?.posts[0]?.imageURL}
+                alt="User Post"
+                className="w-full h-[450px] object-cover"
+              />
+            )}
+
+            <div className="px-4 mt-3 text-left flex flex-row gap-3">
+              <Heart />
+              <MessageCircle onClick={() => handleOpenImage(user?.posts[0].imageURL, user)} />
+            </div>
+
+            <div className="p-4 text-left">
+              <p className="text-gray-700">
+                <span className="font-semibold text-black">{user?.userName}</span> {user?.posts?.[0]?.content}
               </p>
             </div>
-            <button
-              className="text-blue-500 text-sm px-4 py-2 rounded-md transition cursor-pointer"
-              onClick={() => handleFollowRequest(user?.id)}
-            >
-              Follow
-            </button>
+
+            <hr className="border-t border-gray-300" />
           </div>
+        );
+      })}
 
-          {user?.posts[0]?.imageURL && (
-            <img
-              src={user?.posts[0]?.imageURL}
-              alt="User Post"
-              className="w-full h-[450px] object-cover"
-            />
-          )}
-
-          <div className="px-4 mt-3 text-left flex flex-row gap-3">
-            <Heart  />
-            <MessageCircle onClick={() => handleOpenImage(user?.posts[0].imageURL ,user)} />
-          </div>
-
-          <div className="p-4 text-left">
-            <p className="text-gray-700">
-              <span className="font-semibold text-black">{user?.userName}</span> {user?.posts?.[0]?.content}
-            </p>
-          </div>
-
-          <hr className="border-t border-gray-300" />
-        </div>
-      ))}
       <div>
         <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalClassName="w-[900px] h-[400px] rounded-md">
           <div className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden w-full max-w-4xl mx-auto">
@@ -107,7 +135,6 @@ const UserFeed = () => {
               </div>
             </div>
           </div>
-
         </Modal>
       </div>
     </div>

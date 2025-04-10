@@ -12,13 +12,14 @@ import { setContext } from "@apollo/client/link/context"
 import { PersistGate } from "redux-persist/integration/react";
 import router from './Utills/Route';
 
+
+
 const httpLink = createHttpLink({
-  uri: "http://localhost:3001/graphql"
+  uri: "api/graphql"
 })
 
 const authLink = setContext((_, { headers }) => {
-
-  const token = sessionStorage.getItem("token");
+  const token=sessionStorage.getItem("token")
   const authorization = token ? `Bearer ${token}` : '';
 
   return {

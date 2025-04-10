@@ -1,23 +1,27 @@
 import { useQuery, gql } from "@apollo/client";
 
 const GET_FEED = gql`
-  query GetFeed {
-    feed {
+query getFeed {
+  feed {
+    id
+    userName
+    avatar
+    bio
+    connectionStatus
+    posts {
       id
-      userName
-      avatar
-      bio
-      posts {
-        id
-        content
-        imageURL
-      }
+      content
+      imageURL
     }
   }
+}
+
 `;
 
 const useFeed = () => {
   const { loading, error, data } = useQuery(GET_FEED);
+  console.log(error);
+  
   return { loading, error, feed: data?.feed };
 };
 
