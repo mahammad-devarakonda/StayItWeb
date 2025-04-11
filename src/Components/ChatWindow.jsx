@@ -19,7 +19,6 @@ const ChatWindow = ({ selectedChatUser, messages, setMessages, socket, id, userN
                         <h2 className="text-lg font-semibold">{selectedChatUser.userName}</h2>
                     </div>
 
-                    {/* Messages Section */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50">
                         {messages.length === 0 ? (
                             <p className="text-black text-center">No messages yet.</p>
@@ -42,10 +41,6 @@ const ChatWindow = ({ selectedChatUser, messages, setMessages, socket, id, userN
                         )}
                         <div ref={messagesEndRef} />
                     </div>
-
-
-
-
 
                     {/* Chat Input Section */}
                     <div className="border-t border-gray-200 p-4 flex items-center relative">

@@ -28,8 +28,6 @@ const OTPInput = ({ length = 4 }) => {
   const dispatch=useDispatch()
   const navigate=useNavigate()
 
-
-
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
     const newArray = [...inputArray];

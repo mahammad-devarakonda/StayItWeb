@@ -2,8 +2,7 @@ import React, { useRef, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { loginSuccess } from '../Redux/authSlice'
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Code } from "lucide-react";
 
 
 const LOGIN = gql`
@@ -18,7 +17,6 @@ const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [login, { loading, error, data }] = useMutation(LOGIN);
   const [showPassword, setShowPassword] = useState(false)
@@ -71,7 +69,7 @@ const Login = () => {
           className="flex flex-col border border-gray-300 rounded-2xl gap-4 sm:gap-6 p-6 sm:p-8 shadow-lg bg-white"
         >
           <h1 className="text-xl sm:text-2xl font-medium font-serif text-left tracking-widest">
-            StayIt
+            Bondly
           </h1>
           <input
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-green-200"
@@ -109,6 +107,16 @@ const Login = () => {
       <div className="w-full max-w-sm sm:max-w-md md:max-w-md flex items-center justify-center border border-gray-300 shadow-lg rounded-xl bg-white mt-4 p-4">
         <p className="text-sm sm:text-base">New to StayIt? <Link className="text-blue-400" to={'/register'}>Create account</Link></p>
       </div>
+      <div className="fixed top-4 right-4 z-50">
+        <Link
+          to="/developer"
+          className="flex flex-col items-center text-gray-700 hover:text-blue-600 transition"
+        >
+          <Code size={22} />
+          <span className="text-[10px]">About Developer</span>
+        </Link>
+      </div>
+
     </div>
   );
 };

@@ -8,6 +8,7 @@ import ErrorPage from "../Components/Error";
 import Inbox from "../Components/Inbox";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import TwoFactorAuth from "../Components/TwoFactorAuth";
+import Developer from "../Components/Developer";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
     {
         path:'/2FA',
         element:<TwoFactorAuth/>,
+        errorElement:<ErrorPage/>
+    },
+    {
+        path:'/developer',
+        element:<Developer/>,
         errorElement:<ErrorPage/>
     },
     {

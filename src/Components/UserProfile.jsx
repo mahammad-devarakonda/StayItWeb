@@ -3,13 +3,15 @@ import { useParams, Link } from "react-router-dom";
 import useUserProfile from "../Hooks/useUserProfile";
 import useMyConnections from "../Hooks/useMyConnections";
 import Modal from "./Modal";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
+import ProfileHeader from "./ProfileHeader";
+import PostsGrid from "./PostsGrid";
 
 const UserProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showConnections, setShowConnections] = useState(false);
-  const authData=useSelector((state)=>state.auth)
+  const authData = useSelector((state) => state.auth)
 
   const [isCollapsed, setIsCollapsed] = useState(
     sessionStorage.getItem("isCollapsed") === "true"
@@ -52,40 +54,14 @@ const UserProfile = () => {
       <main className="flex-1 p-6 overflow-y-auto min-w-0 transition-all duration-300">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
-            <div className="relative mb-5 md:mb-0">
-              <img
-                className="rounded-full h-32 w-32 md:h-40 md:w-40 object-cover border border-gray-300 shadow-md"
-                src={user?.avatar}
-                alt={`${user?.userName} avatar`}
-              />
-            </div>
-
-            {/* Profile Details */}
-            <div className="flex flex-col space-y-4 text-center md:text-left">
-              <div className="flex flex-col md:flex-row items-center md:space-x-6">
-                <h1 className="text-black text-xl md:text-2xl font-semibold">{user?.userName}</h1>
-                {loggedInUser.id !== userID && (
-                  <Link
-                    to={`/inbox/${userID}`}
-                    state={{ user }}
-                    className="border border-gray-400 px-4 py-2 rounded-md font-semibold text-sm md:text-base transition hover:bg-gray-200"
-                  >
-                    Message
-                  </Link>
-                )}
-              </div>
-
-              {/* Post & Connections Count */}
-              <div className="flex justify-center md:justify-start space-x-6 text-gray-700 text-sm md:text-lg">
-                <p><span className="font-semibold">{posts.length}</span> Posts</p>
-                <button
-                  onClick={handleShowConnections}
-                  className="cursor-pointer"
-                >
-                  <span className="font-semibold">{userProfile?.user?.connection}</span> Connections
-                </button>
-              </div>
-            </div>
+            <ProfileHeader
+              user={user}
+              postsCount={posts.length}
+              connectionCount={userProfile?.user?.connection}
+              loggedInUser={loggedInUser}
+              userID={userID}
+              onShowConnections={() => setShowConnections(true)}
+            />
           </div>
 
           {/* Bio */}
@@ -98,21 +74,7 @@ const UserProfile = () => {
           <hr className="border-t border-gray-300 my-6 w-full" />
 
           {/* Grid Layout for Posts */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 py-6">
-            {posts.length ? (
-              posts.map((post) => (
-                <img
-                  key={post?.id}
-                  src={post?.imageURL}
-                  alt="User Post"
-                  className="w-full h-40 sm:h-56 object-cover rounded-md shadow-md cursor-pointer transition-transform"
-                  onClick={() => handleOpenImage(post?.imageURL, post?.content)}
-                />
-              ))
-            ) : (
-              <p className="text-gray-500 col-span-3 text-center">No posts available</p>
-            )}
-          </div>
+          <PostsGrid posts={posts} onImageClick={handleOpenImage}/>
         </div>
 
         <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalClassName="w-[600px] h-auto rounded-lg p-6">
