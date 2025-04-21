@@ -13,7 +13,7 @@ import Modal from "./Modal";
 import useUploadImage from "../Hooks/useUploadImage";
 import MyRequestList from "./MyRequestList";
 
-const Navbar = ({ isCollapsed, setIsCollapsed }) => {
+const Navbar = () => {
   const location = useLocation();
   const authData = useSelector((state) => state.auth);
   const {
@@ -30,21 +30,11 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div
-        className={`hidden md:flex h-screen bg-white border-r border-gray-200 fixed flex-col justify-between transition-all duration-300 overflow-hidden ${
-          isCollapsed ? "w-16" : "w-64"
-        }`}
-      >
+      <div className="hidden md:flex h-screen bg-white border-r border-gray-200 fixed flex-col justify-between transition-all duration-300 overflow-hidden w-16">
         <div className="flex justify-between items-center px-4 py-3">
-          {!isCollapsed ? (
-            <h1 className="text-2xl font-medium font-serif tracking-widest">
-              StayIt
-            </h1>
-          ) : (
-            <h1 className="text-2xl font-medium font-serif tracking-widest text-center">
-              ST
-            </h1>
-          )}
+          <h1 className="text-2xl font-medium font-serif tracking-widest">
+            ST
+          </h1>
         </div>
 
         <nav className="flex flex-col flex-grow justify-between items-start px-3 mt-10">
@@ -99,7 +89,12 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
 
       {/* Mobile Bottom Navbar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-md z-50 flex justify-around items-center py-2">
-        <Link to="/feed" className={`flex flex-col items-center ${location.pathname === "/feed" && "text-blue-600"}`}>
+        <Link
+          to="/feed"
+          className={`flex flex-col items-center ${
+            location.pathname === "/feed" && "text-blue-600"
+          }`}
+        >
           <Home size={22} />
           <span className="text-[10px]">Home</span>
         </Link>
@@ -107,7 +102,12 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
           <PlusCircle size={22} />
           <span className="text-[10px]">Create</span>
         </button>
-        <Link to="/inbox" className={`flex flex-col items-center ${location.pathname === "/inbox" && "text-blue-600"}`}>
+        <Link
+          to="/inbox"
+          className={`flex flex-col items-center ${
+            location.pathname === "/inbox" && "text-blue-600"
+          }`}
+        >
           <MessageCircle size={22} />
           <span className="text-[10px]">Inbox</span>
         </Link>
@@ -115,13 +115,18 @@ const Navbar = ({ isCollapsed, setIsCollapsed }) => {
           <User size={22} />
           <span className="text-[10px]">Me</span>
         </Link>
-        <Link to="/developer" className={`flex flex-col items-center ${location.pathname === "/explore" && "text-blue-600"}`}>
+        <Link
+          to="/developer"
+          className={`flex flex-col items-center ${
+            location.pathname === "/explore" && "text-blue-600"
+          }`}
+        >
           <Code size={22} />
           <span className="text-[10px]">Developer</span>
         </Link>
       </div>
 
-      {/* Modals shared */}
+      {/* Modals */}
       <Modal
         isOpen={isRequestListOpen}
         onClose={() => setRequestListOpen(false)}

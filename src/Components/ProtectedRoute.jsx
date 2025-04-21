@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import Navbar from "./Navbar"; // Import Navbar
+import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
@@ -10,16 +10,14 @@ const ProtectedRoute = () => {
   const location = useLocation()
 
   const [isCollapsed, setIsCollapsed] = useState(
-
-
     sessionStorage.getItem("isCollapsed") === "true"
   );
 
- 
+
   useEffect(() => {
     if (location.pathname === "/inbox" || "/inbox/:id") {
       setIsCollapsed(true);
-    }else{
+    } else {
       setIsCollapsed(false);
     }
   }, [location.pathname]);
@@ -31,7 +29,9 @@ const ProtectedRoute = () => {
   return isAuthenticated ? (
     <div>
       <Navbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <Outlet />
+      <div className="lg:ml-16">
+        <Outlet />
+      </div>
     </div>
   ) : (
     <Navigate to="/" />

@@ -1,38 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { MessageCircle, Send } from "lucide-react";
-import { createSocketConnection } from '../Utills/Socket';
-import useMyConnections from '../Hooks/useMyConnections';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import useMyConnections from '../Hooks/useMyConnections';
 import useChat from "../Hooks/useChatMessages";
+import { createSocketConnection } from '../Utills/Socket';
 import ChatWindow from './ChatWindow';
-
 
 const Inbox = () => {
     const [selectedChatUser, setSelectedChatUser] = useState(null);
-    const [message, setMessage] = useState("");
-    const { user:{userName,id} } = useSelector((state) => state.auth);
+    const [showChatOnly, setShowChatOnly] = useState(false);
+    const { user: { userName, id } } = useSelector((state) => state.auth);
     const { connections } = useMyConnections(id);
+    const { data } = useChat(selectedChatUser?.id);
+    console.log(data);
+    
     const navigate = useNavigate();
     const [socket, setSocket] = useState(null);
-    const { data } = useChat(selectedChatUser?.id);
     const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
+    const [userStatusMap, setUserStatusMap] = useState({});
 
     useEffect(() => {
-        if (data && selectedChatUser) {
-            setMessages(data?.chat?.message);
+        if (data) {
+            setMessages(data);
         }
-    }, [data, selectedChatUser]);
+    }, [data]);
 
     useEffect(() => {
         if (selectedChatUser) {
             const newSocket = createSocketConnection();
             setSocket(newSocket);
 
-            newSocket.emit("joinChat", { userName, ChatUser: selectedChatUser.id, LoginUser: id });
+            newSocket.emit("joinChat", {
+                userName,
+                ChatUser: selectedChatUser.id,
+                LoginUser: id
+            });
+            newSocket.emit("userOnline", id);
+
             newSocket.on("receiveMessage", (data) => {
                 setMessages((prev) => [...prev, data]);
             });
+
+            newSocket.on("updateUserStatus", ({ userId, status }) => {
+                setUserStatusMap(prev => ({
+                    ...prev,
+                    [userId]: status
+                }));
+            });
+
 
             return () => {
                 newSocket.disconnect();
@@ -40,69 +56,67 @@ const Inbox = () => {
         }
     }, [selectedChatUser, id]);
 
+
     const handleMesgClick = (ChatUser) => {
         setSelectedChatUser(ChatUser);
-        setMessages([]);
         navigate(`/inbox/${ChatUser.id}`);
+        setShowChatOnly(true); // Hide sidebar on mobile
     };
 
     const handleSendMessage = () => {
         if (message.trim() && selectedChatUser && socket) {
-            const roomId = [id, selectedChatUser.id].sort().join("_"); // Ensure same sorting as backend
+            const roomId = [id, selectedChatUser.id].sort().join("_");
             const newMessage = {
                 roomId,
                 message,
-                senderId: id, // Ensure senderId is a direct value
+                senderId: id,
                 receiverId: selectedChatUser.id
             };
 
-            // 1️⃣ Immediately update UI with sender object for consistency
-            setMessages((prev) => [...prev, { ...newMessage, sender: { id, userName } }]);
+            setMessages((prev) => [...prev, {
+                ...newMessage,
+                sender: { id, userName }
+            }]);
 
-            // 2️⃣ Clear input field
             setMessage("");
-
-            // 3️⃣ Send message to backend
             socket.emit("sendMessage", newMessage);
         }
     };
 
-
     return (
-        <div className="w-full flex h-screen">
-            {/* Sidebar */}
-            <div className="w-1/3 bg-white p-6 shadow-lg">
-                <aside className="px-16">
-                    <h1 className="text-xl font-semibold mb-4">Inbox</h1>
-                    <div className="space-y-4">
-                        {connections?.map((eachConnection) => (
-                            <div
-                                key={eachConnection.id}
-                                className="flex flex-col bg-gray-100 p-4 rounded-lg hover:bg-gray-200 transition cursor-pointer"
-                                onClick={() => handleMesgClick(eachConnection)}
-                            >
-                                <p className="font-semibold text-gray-800">{eachConnection.userName}</p>
-                                <p className={`text-sm ${eachConnection.status === "online" ? "text-green-500" : "text-gray-500"}`}>
-                                    {eachConnection.status === "online" ? "Online" : "Offline"}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </aside>
+        <div className="w-full h-screen p-4 text-white flex flex-col md:flex-row overflow-hidden">
+            <div className={`w-full md:w-1/3 lg:w-1/4 overflow-y-auto pr-2 ${showChatOnly ? 'hidden md:block' : 'block'}`}>
+                <div className="grid gap-4">
+                    {connections?.map((eachConnection) => (
+                        <div
+                            key={eachConnection.id}
+                            onClick={() => handleMesgClick(eachConnection)}
+                            className="cursor-pointer p-4 bg-white rounded-xl shadow-md hover:bg-gray-100 transition duration-200"
+                        >
+                            <p className="font-semibold text-gray-800 text-lg">{eachConnection.userName}</p>
+                            <p className={`text-sm ${userStatusMap[eachConnection.id] === "online" ? "text-green-500" : "text-gray-500"}`}>
+                                {userStatusMap[eachConnection.id] === "online" ? "Online" : "Offline"}
+                            </p>
+
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* Chat Window */}
-            <ChatWindow
-                selectedChatUser={selectedChatUser}
-                messages={messages}
-                setMessages={setMessages}
-                socket={socket}
-                id={id}
-                userName={userName}
-                message={message}
-                setMessage={setMessage}
-                handleSendMessage={handleSendMessage}
-            />
+            <div className={`w-full md:w-2/3 lg:w-3/4 ${selectedChatUser ? "block" : "hidden"} md:block overflow-y-auto`}>
+                <ChatWindow
+                    selectedChatUser={selectedChatUser}
+                    messages={messages?.message}
+                    setMessages={setMessages}
+                    socket={socket}
+                    id={id}
+                    userName={userName}
+                    message={message}
+                    setMessage={setMessage}
+                    handleSendMessage={handleSendMessage}
+                />
+            </div>
         </div>
     );
 };

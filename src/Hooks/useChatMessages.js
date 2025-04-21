@@ -24,10 +24,6 @@ const useChat = (chatId) => {
         variables: { id: chatId },
     });
 
-    console.log(data);
-    console.log(chatId);
-    
-    
     return { data, loading, error };
 };
 
