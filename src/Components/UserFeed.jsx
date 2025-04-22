@@ -24,8 +24,15 @@ const UserFeed = () => {
   };
 
   const handleFollowClick = (id) => {
-    setRequestedIds((prev) => [...prev, id]);
-    handleFollowRequest(id);
+    const user = feed.find((u) => u.id === id);
+    if (!user || user.connectionStatus === "interested" || user.connectionStatus === "accepted") {
+      return; // Already requested or accepted
+    }
+
+    if (!requestedIds.includes(id)) {
+      setRequestedIds((prev) => [...prev, id]);
+      handleFollowRequest(id);
+    }
   };
 
   if (loading) return <p className="text-center">Loading...</p>;

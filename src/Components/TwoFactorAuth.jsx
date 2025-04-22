@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -28,10 +28,15 @@ const OTPInput = ({ length = 4 }) => {
   const dispatch=useDispatch()
   const navigate=useNavigate()
 
+
+  useEffect(() => {
+    arrayRef.current[0]?.focus();
+  }, []);
+
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
     const newArray = [...inputArray];
-    newArray[index] = value.slice(-1); // Restrict to 1 digit
+    newArray[index] = value.slice(-1); 
     setInputArray(newArray);
 
     if (value && index < length - 1) {
@@ -43,6 +48,12 @@ const OTPInput = ({ length = 4 }) => {
     if (e.key === "Backspace" && !inputArray[index] && index > 0) {
       arrayRef.current[index - 1]?.focus();
     }
+
+    if (e.key === "Enter") {
+      handleSubmitOTP();
+    }
+
+
   };
 
   const [verifyOTPMutation, { loading, error }] = useMutation(VERIFY_OTP);
@@ -58,7 +69,6 @@ const OTPInput = ({ length = 4 }) => {
       
       
       dispatch(loginSuccess({ user: userData, token }));
-      sessionStorage.setItem("token",token)
       navigate('/feed')
     } catch (err) {
       console.error("OTP Verification Failed:", err);

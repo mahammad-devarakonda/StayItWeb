@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
-        path:'/2FA',
+        path:'/2factorAuth',
         element:<TwoFactorAuth/>,
         errorElement:<ErrorPage/>
     },

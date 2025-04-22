@@ -45,7 +45,7 @@ const Login = () => {
 
       if (response?.data?.login?.message) {
         alert(response?.data?.login?.message);
-        navigate('/2FA', { state: { email } });
+        navigate('/2factorAuth', { state: { email } });
       } else {
         alert("Login failed. Please try again.");
       }

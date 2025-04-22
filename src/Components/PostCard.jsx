@@ -10,13 +10,13 @@ const PostCard = ({ user, onFollowClick, onImageClick, isRequested }) => {
 
   const getButtonLabel = () => {
     if (user.connectionStatus === "accepted") return "Friends";
-    if (isRequested) return "Requested";
+    if (user.connectionStatus === "interested" || isRequested) return "Requested";
     return "Follow";
   };
 
   const getButtonClass = () => {
     if (user.connectionStatus === "accepted") return "bg-green-500 text-white cursor-default";
-    if (isRequested) return "bg-gray-200 text-gray-500 cursor-not-allowed";
+    if (user.connectionStatus === "interested" || isRequested) return "bg-gray-200 text-gray-500 cursor-not-allowed";
     return "text-blue-500 hover:bg-blue-100";
   };
 
@@ -39,33 +39,50 @@ const PostCard = ({ user, onFollowClick, onImageClick, isRequested }) => {
         </div>
 
         <button
-          disabled={isDisabled}
           className={`text-sm px-4 py-2 rounded-md transition ${getButtonClass()}`}
           onClick={() => onFollowClick(user.id)}
+          disabled={isDisabled}
         >
           {getButtonLabel()}
         </button>
       </div>
 
-      {user?.posts?.[0]?.imageURL && (
+      {user?.posts?.[0]?.imageURL ? (
         <img
           src={user.posts[0].imageURL}
           alt="User Post"
           className="w-full h-[450px] object-cover"
         />
+      ) : (
+        <div className="w-full h-[200px] bg-gray-100 flex items-center justify-center text-gray-400">
+          No post available
+        </div>
       )}
 
-      <div className="px-4 mt-3 text-left flex flex-row gap-3">
-        <Heart />
-        <MessageCircle onClick={() => onImageClick(user.posts[0].imageURL, user)} />
-      </div>
+      {user?.posts?.[0] && (
+        <>
+          <div className="px-4 mt-3 text-left flex flex-row gap-3">
+            <Heart
+              role="button"
+              aria-label="Like"
+              className="cursor-pointer hover:text-red-500 transition"
+            />
+            <MessageCircle
+              role="button"
+              aria-label="Comment"
+              className="cursor-pointer hover:text-blue-500 transition"
+              onClick={() => onImageClick(user.posts[0].imageURL, user)}
+            />
+          </div>
 
-      <div className="p-4 text-left">
-        <p className="text-gray-700">
-          <span className="font-semibold text-black">{user.userName}</span>{" "}
-          {user.posts?.[0]?.content}
-        </p>
-      </div>
+          <div className="p-4 text-left">
+            <p className="text-gray-700">
+              <span className="font-semibold text-black">{user.userName}</span>{" "}
+              {user.posts[0].content}
+            </p>
+          </div>
+        </>
+      )}
 
       <hr className="border-t border-gray-300" />
     </div>
