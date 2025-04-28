@@ -17,8 +17,11 @@ const Layout = () => {
   const { token } = useSelector((state) => state.auth);
 
   const httpLink = createHttpLink({
-    uri: "api/graphql"
+    uri: window.location.hostname === "localhost"
+      ? "http://localhost:3001/graphql"
+      : "/api/graphql"
   });
+  
 
   const authLink = setContext((_, { headers }) => {
     const authorization = token ? `Bearer ${token}` : '';

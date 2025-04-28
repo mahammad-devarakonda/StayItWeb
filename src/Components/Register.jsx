@@ -54,7 +54,7 @@ const Register = () => {
       });
 
       if (response?.data?.register?.message) {
-        alert(response?.data?.login?.message);
+        alert(response?.data?.register?.message);
         navigate('/2factorAuth', { state: { email } });
       } else {
         alert("Failed to register");
