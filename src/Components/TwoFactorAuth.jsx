@@ -1,4 +1,4 @@
-import React, { useRef, useState,useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -25,8 +25,8 @@ const OTPInput = ({ length = 4 }) => {
   const location = useLocation();
   const email = location.state?.email || "";
   const otp = inputArray.join("").trim();
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const OTPInput = ({ length = 4 }) => {
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
     const newArray = [...inputArray];
-    newArray[index] = value.slice(-1); 
+    newArray[index] = value.slice(-1);
     setInputArray(newArray);
 
     if (value && index < length - 1) {
@@ -61,15 +61,19 @@ const OTPInput = ({ length = 4 }) => {
   const handleSubmitOTP = async () => {
     try {
       const response = await verifyOTPMutation({
-        variables: { email, otp }, 
+        variables: { email, otp },
       });
 
-      const userData=response?.data?.verifyOTP?.user
-      const token=response?.data?.verifyOTP?.token
-      
-      
-      dispatch(loginSuccess({ user: userData, token }));
-      navigate('/feed')
+      const userData = response?.data?.verifyOTP?.user
+      const token = response?.data?.verifyOTP?.token
+
+      if (token && userData) {
+        dispatch(loginSuccess({ user: userData, token }));
+        navigate('/feed')
+      } else {
+        alert("Invalid OTP or something went wrong");
+      }
+
     } catch (err) {
       console.error("OTP Verification Failed:", err);
       alert("OTP Verification Failed. Please try again.");

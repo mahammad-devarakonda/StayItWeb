@@ -17,7 +17,6 @@ const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
   const [login, { loading, error, data }] = useMutation(LOGIN);
   const [showPassword, setShowPassword] = useState(false)
 
@@ -105,7 +104,7 @@ const Login = () => {
         </form>
       </div>
       <div className="w-full max-w-sm sm:max-w-md md:max-w-md flex items-center justify-center border border-gray-300 shadow-lg rounded-xl bg-white mt-4 p-4">
-        <p className="text-sm sm:text-base">New to StayIt? <Link className="text-blue-400" to={'/register'}>Create account</Link></p>
+        <p className="text-sm sm:text-base">New to Bondly? <Link className="text-blue-400" to={'/register'}>Create account</Link></p>
       </div>
       <div className="fixed top-4 right-4 z-50">
         <Link

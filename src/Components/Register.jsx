@@ -111,14 +111,14 @@ const Register = () => {
           {error && <p className="text-red-500 text-sm text-center">Error: {error?.message}</p>}
           {data && (
             <p className="text-green-500 text-sm text-center">
-              Welcome, {user?.userName}! Happy to use StayIt.
+              Welcome, {user?.userName}! Happy to use Bondly.
             </p>
           )}
         </form>
       </div>
       <div className="w-full max-w-sm sm:max-w-md md:max-w-md flex items-center justify-center border border-gray-300 shadow-lg rounded-xl bg-white mt-4 p-4">
         <p className="text-sm sm:text-base">
-          Have an account in StayIt? <Link className="text-blue-400" to={'/'}>Sign In</Link>
+          Have an account in Bondly? <Link className="text-blue-400" to={'/'}>Sign In</Link>
         </p>
       </div>
       <div className="fixed top-4 right-4 z-50">

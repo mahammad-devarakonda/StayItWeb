@@ -12,18 +12,11 @@ import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import useUploadImage from "../Hooks/useUploadImage";
 import MyRequestList from "./MyRequestList";
+import AddPost from "./AddPost";
 
 const Navbar = () => {
   const location = useLocation();
   const authData = useSelector((state) => state.auth);
-  const {
-    content,
-    setContent,
-    handleFileChange,
-    handleUpload,
-    loading,
-    error,
-  } = useUploadImage();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isRequestListOpen, setRequestListOpen] = useState(false);
 
@@ -32,8 +25,8 @@ const Navbar = () => {
       {/* Desktop Sidebar */}
       <div className="hidden md:flex h-screen bg-white border-r border-gray-200 fixed flex-col justify-between transition-all duration-300 overflow-hidden w-16">
         <div className="flex justify-between items-center px-4 py-3">
-          <h1 className="text-2xl font-medium font-serif tracking-widest">
-            ST
+          <h1 className="text-4xl font-medium font-serif tracking-widest justify-center text-red-400">
+          ∞
           </h1>
         </div>
 
@@ -139,30 +132,9 @@ const Navbar = () => {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         title="Create Post"
+        className="rounded-2xl"
       >
-        <form onSubmit={handleUpload} className="flex flex-col gap-3 p-4">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="border rounded-md text-sm py-2 px-4"
-          />
-          <input
-            type="text"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="border rounded-md text-sm py-2 px-4"
-            placeholder="Provide your caption"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-            disabled={loading}
-          >
-            {loading ? "Uploading..." : "Upload"}
-          </button>
-          {error && <p className="text-red-500 text-sm">{error.message}</p>}
-        </form>
+       <AddPost/>
       </Modal>
     </>
   );
