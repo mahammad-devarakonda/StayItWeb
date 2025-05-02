@@ -37,6 +37,9 @@ const Layout = () => {
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
+    fetchOptions: {
+      credentials: 'include', // Include cookies (including HttpOnly cookie)
+    },
   });
 
   return (

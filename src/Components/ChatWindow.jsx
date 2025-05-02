@@ -5,9 +5,6 @@ import { useEffect, useRef } from "react";
 const ChatWindow = ({ selectedChatUser, messages, id, message, setMessage, handleSendMessage }) => {
     const messagesEndRef = useRef(null);
 
-    console.log(messages);
-    
-
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

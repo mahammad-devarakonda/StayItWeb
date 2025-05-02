@@ -11,9 +11,7 @@ const Inbox = () => {
     const [showChatOnly, setShowChatOnly] = useState(false);
     const { user: { userName, id } } = useSelector((state) => state.auth);
     const { connections } = useMyConnections(id);
-    const { data } = useChat(selectedChatUser?.id);
-    console.log(data);
-    
+    const { data } = useChat(selectedChatUser?.id);    
     const navigate = useNavigate();
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);

@@ -74,7 +74,7 @@ const UserProfile = () => {
           <hr className="border-t border-gray-300 my-6 w-full" />
 
           {/* Grid Layout for Posts */}
-          <PostsGrid posts={posts} onImageClick={handleOpenImage}/>
+          <PostsGrid posts={posts} onImageClick={handleOpenImage} />
         </div>
 
         <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalClassName="w-[600px] h-auto rounded-lg p-6">
@@ -83,7 +83,7 @@ const UserProfile = () => {
               <img
                 src={selectedImage.imageURL}
                 alt="Selected Post"
-                className="w-full h-auto"
+                className="w-full max-h-[400px] object-contain rounded-lg"
               />
               <p className="text-gray-800 mt-2">{selectedImage.content}</p>
             </div>

@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import Modal from "./Modal";
-import useUploadImage from "../Hooks/useUploadImage";
 import MyRequestList from "./MyRequestList";
 import AddPost from "./AddPost";
 

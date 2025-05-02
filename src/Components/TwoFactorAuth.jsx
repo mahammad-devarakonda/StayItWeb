@@ -27,8 +27,6 @@ const OTPInput = ({ length = 4 }) => {
   const otp = inputArray.join("").trim();
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-
   useEffect(() => {
     arrayRef.current[0]?.focus();
   }, []);
@@ -76,7 +74,8 @@ const OTPInput = ({ length = 4 }) => {
 
     } catch (err) {
       console.error("OTP Verification Failed:", err);
-      alert("OTP Verification Failed. Please try again.");
+      alert(err.message || "OTP Verification Failed.");
+
     }
   };
 
