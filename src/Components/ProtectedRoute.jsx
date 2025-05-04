@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
@@ -20,21 +20,6 @@ const ProtectedRoute = () => {
 
   const isAuthenticated = isTokenValid();
 
-  const [isCollapsed, setIsCollapsed] = useState(
-    sessionStorage.getItem("isCollapsed") === "true"
-  );
-
-  useEffect(() => {
-    if (location.pathname.startsWith("/inbox")) {
-      setIsCollapsed(true);
-    } else {
-      setIsCollapsed(false);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    sessionStorage.setItem("isCollapsed", isCollapsed);
-  }, [isCollapsed]);
 
   if (location.pathname === "/" && isAuthenticated) {
     return <Navigate to="/feed" />;
@@ -46,7 +31,7 @@ const ProtectedRoute = () => {
 
   return isAuthenticated ? (
     <div>
-      <Navbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <Navbar/>
       <div className="lg:ml-16">
         <Outlet />
       </div>

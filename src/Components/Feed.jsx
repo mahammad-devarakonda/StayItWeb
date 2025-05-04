@@ -4,20 +4,9 @@ import UserFeed from "./UserFeed";
 
 const Feed = () => {
 
-  const [isCollapsed, setIsCollapsed] = useState(
-    sessionStorage.getItem("isCollapsed") === "true"
-  );
-
-  useEffect(() => {
-    sessionStorage.setItem("isCollapsed", isCollapsed);
-  }, [isCollapsed]);
-
   return (
     <div className="flex w-full h-screen">
-      <main
-        className={`h-full overflow-y-auto transition-all duration-300 ${isCollapsed ? "w-[calc(100%-1px)]" : "w-[calc(100%-1px)]"
-          }`}
-      >
+      <main className="flex justify-center items-center w-full h-full transition-all duration-300">
         <UserFeed />
       </main>
 

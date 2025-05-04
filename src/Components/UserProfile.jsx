@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import useUserProfile from "../Hooks/useUserProfile";
 import useMyConnections from "../Hooks/useMyConnections";
 import Modal from "./Modal";
 import { useSelector } from "react-redux"
 import ProfileHeader from "./ProfileHeader";
 import PostsGrid from "./PostsGrid";
+import EditProfile from "./EditProfile";
 
-const UserProfile = () => {
+const UserProfile = () => { 
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showConnections, setShowConnections] = useState(false);
+  const [editProfile, setEditProfile] = useState(false)
   const authData = useSelector((state) => state.auth)
 
-  const [isCollapsed, setIsCollapsed] = useState(
-    sessionStorage.getItem("isCollapsed") === "true"
-  );
 
-  useEffect(() => {
-    sessionStorage.setItem("isCollapsed", isCollapsed);
-  }, [isCollapsed]);
 
   const { id: userID } = useParams();
   const { loading, error, userProfile } = useUserProfile(userID);
@@ -62,9 +58,9 @@ const UserProfile = () => {
               userID={userID}
               onShowConnections={() => setShowConnections(true)}
             />
+            <button onClick={() => setEditProfile(true)}>Edit Profile</button>
           </div>
 
-          {/* Bio */}
           <div className="mt-7 text-center md:text-left">
             <p className="text-gray-700 text-sm md:text-base mt-1">
               {user?.bio}
@@ -72,8 +68,6 @@ const UserProfile = () => {
           </div>
 
           <hr className="border-t border-gray-300 my-6 w-full" />
-
-          {/* Grid Layout for Posts */}
           <PostsGrid posts={posts} onImageClick={handleOpenImage} />
         </div>
 
@@ -108,6 +102,9 @@ const UserProfile = () => {
           ) : (
             <p className="text-gray-500">No connections available</p>
           )}
+        </Modal>
+        <Modal isOpen={editProfile} onClose={() => setEditProfile(false)} modalClassName="w-[300px] h-auto rounded-lg p-6">
+          <EditProfile user={user}/>
         </Modal>
 
 

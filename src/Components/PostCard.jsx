@@ -21,7 +21,7 @@ const PostCard = ({ user, onFollowClick, onImageClick, isRequested }) => {
   };
 
   return (
-    <div className="w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden mb-6">
+    <div className="w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden mb-6 h-full mt-28">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
           <Link to={`/userprofile/${user.id}`} className="hover:opacity-80 transition">
