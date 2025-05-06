@@ -2,8 +2,8 @@ import { useQuery, gql } from "@apollo/client";
 import UserProfile from "../Components/UserProfile";
 
 const GET_USER_PROFILE = gql`
-  query GetUserProfile($id: ID!) {
-    user(id: $id) {
+  query GetUserProfile($id: ID, $email: String) {
+    user(id: $id, email: $email) {
       user {
         id
         userName
@@ -21,10 +21,11 @@ const GET_USER_PROFILE = gql`
   }
 `;
 
-const useUserProfile = (id) => {
+
+const useUserProfile = ({ id, email }) => {
   const { loading, error, data } = useQuery(GET_USER_PROFILE, {
-    variables: { id },
-    skip: !id,
+    variables: { id, email },
+    skip: !(id || email),
   });
 
 

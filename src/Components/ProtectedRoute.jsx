@@ -1,26 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
-import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = () => {
-  const token = useSelector((state) => state.auth.token);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const location = useLocation();
-  const isTokenValid = () => {
-    if (!token) return false;
-    try {
-      const decoded = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      return decoded.exp > currentTime;
-    } catch (err) {
-      return false;
-    }
-  };
 
-  const isAuthenticated = isTokenValid();
+  useEffect(() => {
+    fetch("http://localhost:3001/check-auth", {
+      credentials: "include", // 👈 sends HttpOnly cookie
+    })
+      .then((res) => {
+        setIsAuthenticated(res.status === 200);
+      })
+      .catch(() => setIsAuthenticated(false));
+  }, [location.pathname]);
 
+  if (isAuthenticated === null) return <div>Loading...</div>;
 
+  // Redirect logic
   if (location.pathname === "/" && isAuthenticated) {
     return <Navigate to="/feed" />;
   }
@@ -31,13 +29,13 @@ const ProtectedRoute = () => {
 
   return isAuthenticated ? (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="lg:ml-16">
         <Outlet />
       </div>
     </div>
   ) : (
-    <Outlet /> // allow access to "/" (e.g., login page)
+    <Outlet />
   );
 };
 
