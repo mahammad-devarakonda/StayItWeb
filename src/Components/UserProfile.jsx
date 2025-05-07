@@ -15,12 +15,9 @@ const UserProfile = () => {
   const [editProfile, setEditProfile] = useState(false)
   const authData = useSelector((state) => state.auth)
 
-
-
   const { id: userID } = useParams();
   const { loading, error, userProfile } = useUserProfile(userID);
   const { loading: connectionsLoading, error: connectionsError, connections } = useMyConnections(userID);
-
   const user = userProfile?.user?.user
   const posts = userProfile?.user?.posts || []
   const loggedInUser = authData?.user

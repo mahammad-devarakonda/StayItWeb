@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useFeed from "../Hooks/useFeed";
 import useFollowRequest from "../Hooks/useFollowRequest";
 import PostCard from "../Components/PostCard";
 import Modal from "../Components/Modal";
 import CommentSection from "../Components/CommentSection";
+import { useNavigate } from "react-router-dom";
 
 const UserFeed = () => {
   const { loading, error, feed } = useFeed();
@@ -12,6 +13,13 @@ const UserFeed = () => {
   const [requestedIds, setRequestedIds] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState(null);
+  const navigate=useNavigate()
+
+  useEffect(()=>{
+    if(error){
+      navigate('/')
+    }
+  })
 
   const handleOpenImage = (imageURL, user) => {
     setData({ imageURL, user });

@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
 import { Eye, EyeOff, Code } from "lucide-react";
-
+import useAuth from "../Hooks/useAuth";
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
@@ -19,6 +18,18 @@ const Login = () => {
   const navigate = useNavigate();
   const [login, { loading, error, data }] = useMutation(LOGIN);
   const [showPassword, setShowPassword] = useState(false)
+  const authData=useAuth()
+
+  useEffect(()=>{
+    if (authData?.error) {
+      console.error("Me query failed:", authData.error);
+    }
+    if (authData?.data?.Me) {
+      navigate('/feed');
+    }
+  },[authData])
+  
+  
 
   const handleButtonClick = async (e) => {
     e.preventDefault();
