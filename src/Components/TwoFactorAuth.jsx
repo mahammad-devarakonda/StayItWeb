@@ -101,7 +101,7 @@ const OTPInput = ({ length = 4 }) => {
           {inputArray.map((input, index) => (
             <input
               key={index}
-              type="text"
+              type="number"
               className="w-14 h-14 border border-black rounded-md text-center text-2xl"
               value={input}
               ref={(input) => (arrayRef.current[index] = input)}

@@ -8,7 +8,7 @@ const Developer = () => {
       <div className="flex flex-col md:flex-row items-center gap-10 w-full max-w-5xl">
         <img
           className="w-48 h-48 md:w-72 md:h-72 rounded-full shadow-lg object-cover"
-          src="https://media.licdn.com/dms/image/v2/D5635AQGiFvL1p5Moqg/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1738674281507?e=1744902000&v=beta&t=nLelxwfpwufVkiwJR0crFU3j7143yup-9zr2KC19TUE"
+          src="https://media.licdn.com/dms/image/v2/D5603AQFhKDzYZFd5Rw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1723361386869?e=1752105600&v=beta&t=wvaBEwg6V4y7u2owbaF4Bg1YaNoMbIgc7KonCHbtEe4"
           alt="Developer Avatar"
         />
         <section className="text-center md:text-left">
