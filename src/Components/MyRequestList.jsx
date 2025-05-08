@@ -68,7 +68,7 @@ const MyRequestList = () => {
   if (error) return <p className="text-red-500 text-center">Error: {error.message}</p>;
 
   return (
-    <div className="h-full">
+    <div className="h-full p-5">
       <h2 className="text-lg font-semibold mb-4 px-7">Connection Requests</h2>
       <ul className="space-y-3">
         {requests.length > 0 ? (

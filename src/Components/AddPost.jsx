@@ -20,7 +20,7 @@ const AddPost = () => {
     return (
         <form
             onSubmit={handleSubmit}
-            className="max-w-md mx-auto p-6 bg-white shadow-md rounded-xl space-y-4 mt-10"
+            className="max-w-md mx-auto p-6 bg-white shadow-md space-y-4 mt-10"
         >
             <h2 className="text-2xl font-semibold text-gray-700 text-center">
                 Create a New Post

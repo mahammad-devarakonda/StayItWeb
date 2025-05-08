@@ -13,7 +13,6 @@ const ChatWindow = ({ selectedChatUser, messages, id, message, setMessage, handl
         <div className="w-full bg-white border-l border-gray-200 flex flex-col">
             {selectedChatUser ? (
                 <div className="flex flex-col h-full">
-                    {/* Header Section */}
                     <div className="w-full flex items-center border-b border-gray-200 p-4 gap-4 bg-white z-10 fixed ">
                         <img className="rounded-full w-10 h-10" src={selectedChatUser?.avatar} alt={selectedChatUser?.userName} />
                         <h2 className="text-lg font-semibold text-black">{selectedChatUser?.userName}</h2>
@@ -25,7 +24,6 @@ const ChatWindow = ({ selectedChatUser, messages, id, message, setMessage, handl
                         ) : (
                             messages?.map((msg, index) => (
                                 <div key={index} className={`flex flex-col ${msg?.sender?.id === id ? "items-end" : "items-start"}`}>
-                                    {/* Message Bubble */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
@@ -33,8 +31,7 @@ const ChatWindow = ({ selectedChatUser, messages, id, message, setMessage, handl
                                         className={`flex ${msg?.sender?.id === id ? "justify-end text-right" : "text-left justify-start"}`}
                                     >
                                         <div
-                                            className={`inline-block px-5 py-3 mt-6 rounded-2xl shadow 
-    ${msg?.sender?.id === id
+                                            className={`inline-block px-5 py-3 mt-6 rounded-2xl shadow ${msg?.sender?.id === id
                                                     ? "bg-blue-500 text-white ml-auto rounded-br-none"
                                                     : "bg-gray-100 text-gray-900 mr-auto rounded-bl-none"
                                                 }`}

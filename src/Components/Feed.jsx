@@ -1,15 +1,15 @@
-import React, { useState,useEffect } from "react";
-import Navbar from "./Navbar";
-import UserFeed from "./UserFeed";
+import React, { lazy, Suspense } from "react";
+const UserFeed = lazy(() => import('./UserFeed'))
 
 const Feed = () => {
 
   return (
-    <div className="flex w-full h-screen">
-      <main className="flex justify-center items-center w-full h-full transition-all duration-300">
-        <UserFeed />
+    <div className="flex w-full">
+      <main className="flex justify-center items-center w-full transition-all duration-300">
+        <Suspense fallback={<div className="text-center w-full text-gray-500">Loading feed...</div>}>
+          <UserFeed />
+        </Suspense>
       </main>
-
     </div>
   );
 };
