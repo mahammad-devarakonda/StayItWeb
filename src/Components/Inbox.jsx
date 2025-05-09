@@ -14,13 +14,14 @@ const Inbox = () => {
     const { data } = useChat(selectedChatUser?.id);    
     const navigate = useNavigate();
     const [socket, setSocket] = useState(null);
+    const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [userStatusMap, setUserStatusMap] = useState({});
-
     useEffect(() => {
-        if (data) {
-            setMessages(data);
+        if (data?.chat) {
+            setChatInfo(data.chat);          
+            setMessages(data.chat.message || []);   
         }
     }, [data]);
 
@@ -37,7 +38,7 @@ const Inbox = () => {
             newSocket.emit("userOnline", id);
 
             newSocket.on("receiveMessage", (data) => {
-                setMessages((prev) => [...prev, data]);
+                setMessages((prev = []) => [...prev, data]);
             });
 
             newSocket.on("updateUserStatus", ({ userId, status }) => {
@@ -46,7 +47,6 @@ const Inbox = () => {
                     [userId]: status
                 }));
             });
-
 
             return () => {
                 newSocket.disconnect();
@@ -105,7 +105,7 @@ const Inbox = () => {
             <div className={`w-full md:w-2/3 lg:w-3/4 ${selectedChatUser ? "block" : "hidden"} md:block overflow-y-auto`}>
                 <ChatWindow
                     selectedChatUser={selectedChatUser}
-                    messages={messages?.message}
+                    messages={messages}
                     setMessages={setMessages}
                     socket={socket}
                     id={id}

@@ -15,9 +15,10 @@ import AddPost from "./AddPost";
 
 const Navbar = () => {
   const location = useLocation();
-  const authData = useSelector((state) => state.auth);
+  const { user: { id, email, userName, avatar } } = useSelector((state) => state.auth);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isRequestListOpen, setRequestListOpen] = useState(false);
+
 
   return (
     <>
@@ -78,12 +79,12 @@ const Navbar = () => {
 
           <div className="py-3 flex items-center justify-center group-hover:justify-start transition-all duration-300">
             <Link
-              to={`/userprofile/${authData?.user?.id}`}
+              to={`/userprofile/${id}`}
               className="flex items-center gap-3 text-gray-700 hover:text-red-500 transition-colors duration-200 rounded-lg hover:bg-red-50"
             >
               <div className="relative">
                 <img
-                  src={authData?.user?.avatar}
+                  src={avatar}
                   alt="User Avatar"
                   className="w-9 h-9 rounded-full flex-shrink-0 object-cover transition-transform duration-300 group-hover:scale-105"
                 />
@@ -116,10 +117,6 @@ const Navbar = () => {
           <MessageCircle size={22} />
           <span className="text-[10px]">Inbox</span>
         </Link>
-        <Link to={`/userprofile/${authData?.user?.id}`} className="flex flex-col items-center">
-          <User size={22} />
-          <span className="text-[10px]">Me</span>
-        </Link>
         <Link
           to="/developer"
           className={`flex flex-col items-center ${location.pathname === "/explore" && "text-blue-600"
@@ -135,6 +132,14 @@ const Navbar = () => {
           />
           <span className="text-[10px]">Notifications</span>
         </li>
+        <Link to={`/userprofile/${id}`} className="flex flex-col items-center">
+          <img
+            src={avatar}
+            alt="User Avatar"
+            className="w-8 h-8 rounded-full flex-shrink-0 object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <span className="text-[10px]">Me</span>
+        </Link>
       </div>
 
       <Modal
