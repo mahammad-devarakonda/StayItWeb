@@ -8,11 +8,13 @@ const REVIEW_REQUEST = gql`
             id
             userName
             email
+            avatar
         }
         toUser {
             id
             userName
             email
+            avatar
         }
         status
 

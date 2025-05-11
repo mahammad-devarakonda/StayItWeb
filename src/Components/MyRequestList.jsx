@@ -76,7 +76,7 @@ const MyRequestList = () => {
             fromUser ? (
               <li key={fromUser.id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
                 <div className="flex items-center gap-3">
-                  <img className="w-10 h-10 rounded-full" src={fromUser.profilePic} alt={fromUser.userName} />
+                  <img className="w-10 h-10 rounded-full" src={fromUser.avatar} alt={fromUser.userName} />
                   <p className="text-base font-medium">{fromUser.userName}</p>
                 </div>
                 <button
