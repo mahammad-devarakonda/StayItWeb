@@ -13,6 +13,11 @@ const GET_FEED = gql`
                 id
                 content
                 imageURL
+                likes{
+                    id
+                    userName
+                    avatar
+                }
             }
         }
     }
@@ -57,7 +62,7 @@ const useFeed = () => {
     };
 
     return { loading, error, feed, loadMore, loadingMore, hasMore };
-};
+};  
 
 
 export default useFeed;
