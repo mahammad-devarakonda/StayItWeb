@@ -7,7 +7,7 @@ const PostsGrid = ({ posts, onImageClick }) => {
                         key={post?.id}
                         src={post?.imageURL}
                         alt="User Post"
-                        className="w-full h-40 sm:h-56 object-cover rounded-md shadow-md cursor-pointer transition-transform"
+                        className="w-full h-40 sm:h-56 object-contain rounded-md cursor-pointer transition-transform"
                         onClick={() => onImageClick(post?.imageURL, post?.content)}
                     />
                 ))

@@ -18,7 +18,9 @@ const GET_FEED = gql`
                     userName
                     avatar
                 }
+                createdAt
             }
+
         }
     }
 `;

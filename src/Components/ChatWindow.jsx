@@ -47,8 +47,8 @@ const ChatWindow = ({
                                         transition={{ duration: 0.3 }}
                                         className={`max-w-[80%] md:max-w-[75%] px-4 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap shadow ${
                                             msg?.sender?.id === id
-                                                ? "bg-blue-500 text-white rounded-br-none"
-                                                : "bg-gray-200 text-black rounded-bl-none"
+                                                ? "bg-gradient-to-r from-red-400 to-pink-500 text-white rounded-br-none"
+                                                : "bg-gradient-to-r from-pink-500 to-red-400 text-white rounded-bl-none"
                                         }`}
                                     >
                                         {msg?.message || msg.text}
@@ -73,9 +73,9 @@ const ChatWindow = ({
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleSendMessage}
-                                className="absolute right-2 bg-blue-500 text-white p-2 rounded-full shadow hover:bg-blue-600 transition"
+                                className="absolute right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white p-2 rounded-full shadow hover:bg-blue-600 transition"
                             >
-                                <Send className="w-5 h-5" />
+                                <Send className= "w-5 h-5" />
                             </motion.button>
                         </div>
                     </div>

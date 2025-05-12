@@ -31,7 +31,7 @@ const MyRequestList = () => {
       console.warn("myRequests is undefined or empty:", data);
     }
   }, [data]);
-  
+
 
   const [reviewRequest] = useMutation(REVIEW_REQUEST_MUTATION, {
     onError: (error) => {
@@ -82,13 +82,14 @@ const MyRequestList = () => {
                 <button
                   onClick={() => handleAccept(fromUser.id)}
                   disabled={loadingUsers.has(fromUser.id)}
-                  className={`px-3 py-1 rounded-md transition cursor-pointer ${loadingUsers.has(fromUser.id)
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  className={`px-4 py-2 rounded-full font-medium text-sm transition duration-300 ease-in-out focus:outline-none ${loadingUsers.has(fromUser.id)
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-gradient-to-r from-red-500 to-pink-500 text-white hover:from-red-600 hover:to-pink-600 shadow-md"
                     }`}
                 >
                   {loadingUsers.has(fromUser.id) ? "Processing..." : "Accept"}
                 </button>
+
               </li>
             ) : null
           )

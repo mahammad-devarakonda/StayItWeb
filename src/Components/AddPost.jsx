@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import useAddPost from "../Hooks/useUploadImage";
 
 const AddPost = () => {
@@ -32,12 +32,16 @@ const AddPost = () => {
                     type="file"
                     onChange={(e) => setFile(e.target.files[0])}
                     required
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
-                file:rounded-md file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100"
+                    className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-medium
+                     file:text-white
+                    file:bg-gradient-to-r file:from-red-500 file:to-pink-500
+                     hover:file:from-red-600 hover:file:to-pink-600
+                        file:transition file:duration-300"
                 />
+
                 {file && (
                     <img
                         src={URL.createObjectURL(file)}
@@ -54,14 +58,18 @@ const AddPost = () => {
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Write something about the post..."
                     required
-                    className="w-full border border-gray-300 rounded-lg p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                     rows={5}
+                    className="w-full p-4 text-base text-gray-800 placeholder-gray-400 
+    border border-gray-300 rounded-xl resize-none 
+    shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 
+    focus:border-transparent transition duration-300"
                 />
+
             </div>
 
             <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                className="px-4 py-2 rounded-full font-medium text-sm transition duration-300 ease-in-out focus:outline-none bg-gradient-to-r from-red-500 to-pink-500 text-white hover:from-red-600 hover:to-pink-600 shadow-md"
             >
                 {loading ? "Uploading..." : "Upload Post"}
             </button>
@@ -70,7 +78,7 @@ const AddPost = () => {
                 <p className="text-red-600 text-sm text-center">Error: {error.message}</p>
             )}
             {data && (
-                <p className="text-green-600 text-sm text-center">
+                <p className="text-pink-500 text-sm text-center">
                     {data.addPost.message}
                 </p>
             )}

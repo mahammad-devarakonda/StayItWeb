@@ -45,12 +45,11 @@ const UserFeed = () => {
 
     useEffect(() => {
         const initialLikedState = feed.reduce((acc, post) => {
-            // Check if post.likes is defined before calling .some()
             acc[post.id] = post.likes && post.likes.some(like => like.id === currentUserId); // Set the liked state based on backend data
             return acc;
         }, {});
         setLikedPosts(initialLikedState);
-    }, [feed, currentUserId]); // Add currentUserId dependency
+    }, [feed, currentUserId]); 
 
 
     useEffect(() => {

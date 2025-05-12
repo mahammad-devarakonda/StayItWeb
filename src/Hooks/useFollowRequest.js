@@ -1,4 +1,5 @@
 import { useMutation, gql } from "@apollo/client";
+import { useState } from "react";
 
 const SEND_REQUEST = gql`
   mutation SENDREQUEST($toUser: String!, $status: String!) {
@@ -17,25 +18,26 @@ const SEND_REQUEST = gql`
 `;
 
 const useFollowRequest = () => {
-  const [sendRequest] = useMutation(SEND_REQUEST);
+  const [activeId, setActiveId] = useState(null); 
+  const [sendRequest, { loading, error }] = useMutation(SEND_REQUEST);
 
   const handleFollowRequest = async (id) => {
     try {
-      const { data } = await sendRequest({
+      setActiveId(id);
+      await sendRequest({
         variables: {
           toUser: id,
           status: "interested",
         },
       });
-      
-      alert(`Follow request sent to ${id}`);
     } catch (err) {
       console.error("Error sending request:", err);
-      alert("Failed to send request");
+    } finally {
+      setActiveId(null);
     }
   };
 
-  return { handleFollowRequest };
+  return { handleFollowRequest, loading, error, activeId };
 };
 
 export default useFollowRequest;

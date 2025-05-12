@@ -144,15 +144,9 @@ const Login = () => {
               "Login"
             )}
           </button>
-          {data && (
-            <p className="text-green-500 text-sm text-center animate-fadeIn">
-              Welcome! You are logged in.
-            </p>
-          )}
         </form>
       </div>
-
-
+    
       <div className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-md flex items-center justify-center border border-gray-300 shadow-lg rounded-xl bg-white mt-4 p-4">
         <p className="text-sm sm:text-base">
           New to Bondly?{" "}

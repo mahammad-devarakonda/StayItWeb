@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import ProfileHeader from "./ProfileHeader";
 import PostsGrid from "./PostsGrid";
 import EditProfile from "./EditProfile";
-import { XCircle } from "lucide-react";
 
 const UserProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
