@@ -64,7 +64,7 @@ const ChatWindow = ({
                             <input
                                 type="text"
                                 placeholder="Type a message..."
-                                className="flex-1 p-3 pr-12 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-black shadow-sm"
+                                className="flex-1 p-3 pr-12 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition duration-300 text-black shadow-sm"
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}

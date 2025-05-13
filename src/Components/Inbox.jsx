@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useMyConnections from '../Hooks/useMyConnections';
 import useChat from "../Hooks/useChatMessages";
@@ -8,17 +8,18 @@ import ChatWindow from './ChatWindow';
 import { ArrowLeft } from 'lucide-react';
 
 const Inbox = () => {
-    const [selectedChatUser, setSelectedChatUser] = useState(null);
+    const [selectedChatUser, setSelectedChatUser] = useState();
     const [showChatOnly, setShowChatOnly] = useState(false);
     const { user: { userName, id } } = useSelector((state) => state.auth);
     const { connections } = useMyConnections(id);
     const { data } = useChat(selectedChatUser?.id);
     const navigate = useNavigate();
-    const [socket, setSocket] = useState(null);
+    const socketRef = useRef(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [userStatusMap, setUserStatusMap] = useState({});
+    const { id: chatUserIdFromURL } = useParams();
 
     useEffect(() => {
         if (data?.chat) {
@@ -27,34 +28,77 @@ const Inbox = () => {
         }
     }, [data]);
 
-    useEffect(() => {
-        if (selectedChatUser) {
-            const newSocket = createSocketConnection();
-            setSocket(newSocket);
 
-            newSocket.emit("joinChat", {
+    useEffect(() => {
+        const socket = createSocketConnection();
+        socketRef.current = socket;
+
+        socket.emit("userOnline", id);
+
+        const handleReceive = (data) => {
+            if (data?.senderId === selectedChatUser?.id) {
+                setMessages((prev) => [...prev, data]);
+            }
+        };
+
+        const handleStatus = ({ userId, status }) => {
+            setUserStatusMap(prev => ({ ...prev, [userId]: status }));
+        };
+
+        socket.on("receiveMessage", handleReceive);
+        socket.on("updateUserStatus", handleStatus);
+
+        return () => {
+            socket.off("receiveMessage", handleReceive);
+            socket.off("updateUserStatus", handleStatus);
+            socket.disconnect();
+        };
+    }, [id, selectedChatUser?.id]);
+
+    useEffect(() => {
+        if (selectedChatUser && socketRef.current) {
+            const payload = {
                 userName,
                 ChatUser: selectedChatUser.id,
-                LoginUser: id
-            });
-            newSocket.emit("userOnline", id);
-
-            newSocket.on("receiveMessage", (data) => {
-                setMessages((prev = []) => [...prev, data]);
-            });
-
-            newSocket.on("updateUserStatus", ({ userId, status }) => {
-                setUserStatusMap(prev => ({
-                    ...prev,
-                    [userId]: status
-                }));
-            });
-
-            return () => {
-                newSocket.disconnect();
+                LoginUser: id,
             };
+            socketRef.current.emit("joinChat", payload);
         }
-    }, [selectedChatUser, id]);
+    }, [selectedChatUser]);
+
+
+    useEffect(() => {
+        if (chatUserIdFromURL && connections?.length) {
+            const foundUser = connections.find(conn => conn.id === chatUserIdFromURL);
+            if (foundUser) {
+                setSelectedChatUser(foundUser);
+                setShowChatOnly(true);
+            }
+        }
+    }, [connections, chatUserIdFromURL]);
+
+
+    const handleSendMessage = () => {
+        if (!message.trim()) return;
+
+        const roomId = [id, selectedChatUser.id].sort().join("_");
+        const msgData = {
+            roomId,
+            message,
+            senderId: id,
+            receiverId: selectedChatUser.id,
+        };
+
+        setMessages((prev) => [...prev, {
+            ...msgData,
+            sender: { id, userName },
+            timestamp: new Date()
+        }]);
+
+        setMessage("");
+        socketRef.current.emit("sendMessage", msgData);
+    };
+
 
     const handleMesgClick = (ChatUser) => {
         setSelectedChatUser(ChatUser);
@@ -65,26 +109,6 @@ const Inbox = () => {
     const onBack = () => {
         navigate('/feed')
     }
-
-    const handleSendMessage = () => {
-        if (message.trim() && selectedChatUser && socket) {
-            const roomId = [id, selectedChatUser.id].sort().join("_");
-            const newMessage = {
-                roomId,
-                message,
-                senderId: id,
-                receiverId: selectedChatUser.id
-            };
-
-            setMessages((prev) => [...prev, {
-                ...newMessage,
-                sender: { id, userName }
-            }]);
-
-            setMessage("");
-            socket.emit("sendMessage", newMessage);
-        }
-    };
 
     return (
         <div className="w-full h-full text-white flex flex-col md:flex-row overflow-hidden">
@@ -131,7 +155,7 @@ const Inbox = () => {
                     selectedChatUser={selectedChatUser}
                     messages={messages}
                     setMessages={setMessages}
-                    socket={socket}
+                    socket={socketRef}
                     id={id}
                     userName={userName}
                     message={message}
